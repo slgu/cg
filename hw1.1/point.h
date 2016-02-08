@@ -1,4 +1,5 @@
 #pragma once
+#include "vect.h"
 class point {
     float x;
     float y;
@@ -13,5 +14,11 @@ public:
         x = 0;
         y = 0;
         z = 0;
+    }
+    vect operator-(const point & o) {
+        return vect(x - o.x, y - o.y, z - o.z);
+    }
+    vect operator+(const point & o) {
+        return vect(x + o.x, y + o.y, z + o.z);
     }
 };

@@ -6,8 +6,14 @@ class sphere : public surface {
     float r;
 public:
     sphere(float x, float y, float z, float _r) {
-        o = vector (x, y, z);
-        norm(o);
+        o = point(x, y, z);
         r = _r;
+    }
+    virtual bool intersect(ray & _r) {
+        vect sub = _r.origin - o;
+        float a = inner_product(_r.dir, sub);
+        float b = inner_product(_r.dir, _r.dir);
+        float c = inner_product(sub, sub);
+        return (a * a - b * (c - r * r)) >= 0;
     }
 };

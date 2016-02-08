@@ -7,6 +7,8 @@
 using namespace std;
 #include "camera.h"
 #include "intersection.h"
+#include "surface.h"
+#include "sphere.h"
 #define IM_DEBUGGING
 
 
@@ -20,7 +22,7 @@ using namespace std;
 //
 
 //all data (better set in one namespace)
-
+intersection scene;
 float getTokenAsFloat (string inString, int whichToken)
 {
 
@@ -108,7 +110,8 @@ void parseSceneFile (char *filnam)
     while (! inFile.eof ()) {   // go through every line in the file until finished
 
         getline (inFile, line); // get the line
-
+        sphere * sphere_ptr;
+        camera * camera_ptr;
         switch (line[0])  {     // we'll decide which command based on the first character
 
             //
@@ -125,7 +128,8 @@ void parseSceneFile (char *filnam)
                 y = getTokenAsFloat (line, 2);
                 z = getTokenAsFloat (line, 3);
                 r = getTokenAsFloat (line, 4);
-
+                sphere_ptr = new sphere(x, y, z, r);
+                scene.add_obj(sphere_ptr);
                 // build your sphere here from the parameters
                 // i.e. you must call your sphere constructor and set its position
                 // and radius from the above values. You must also put your new
@@ -166,7 +170,8 @@ void parseSceneFile (char *filnam)
                 ih = getTokenAsFloat (line, 9);
                 pw = getTokenAsFloat (line, 10);
                 ph = getTokenAsFloat (line, 11);
-                camera(x, y, z, vx, vy, vz, d, iw, ih, pw, ph);
+                camera_ptr = new camera(x, y, z, vx, vy, vz, d, iw, ih, pw, ph);
+                scene.set_camera(camera_ptr);
             //
             // lights:
             //
@@ -213,6 +218,8 @@ void parseSceneFile (char *filnam)
         }
 
     }
+    //get result
+    scene.get_intersection("1.exr");
 }
 
 
