@@ -1,0 +1,2 @@
+g++ -g *.cc -I. -I/usr/local/include/OpenEXR -lIlmImf -lImath -lHalf -Wall -o prog_out
+./prog_out file.exr (which will generate file_out.exr as a result)
