@@ -85,7 +85,7 @@ float getTokenAsFloat (string inString, int whichToken)
 // only use "correct" scene files.
 //
 //
-void parseSceneFile (char *filnam)
+void parseSceneFile (char *filnam, char * outputexr)
 {
 
     ifstream inFile(filnam);    // open the file
@@ -219,7 +219,7 @@ void parseSceneFile (char *filnam)
 
     }
     //get result
-    scene.get_intersection("1.exr");
+    scene.get_intersection(std::string(outputexr));
 }
 
 
@@ -231,12 +231,12 @@ void parseSceneFile (char *filnam)
 int main (int argc, char *argv[])
 {
 
-    if (argc != 2) {
-        cerr << "useage: raytra scenefilename" << endl;
+    if (argc != 3) {
+        cerr << "useage: ./raytra scenefilename outputopenexr" << endl;
         return -1;
     }
 
-    parseSceneFile (argv[1]);
+    parseSceneFile (argv[1], argv[2]);
 
     return 0;
 }
