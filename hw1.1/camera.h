@@ -15,7 +15,7 @@ public:
     float l, r, t, b;
     //float x, y, z, vx, vy, vz, d, iw, ih, pw, ph;
     camera(float x, float y, float z, float vx, float vy, float vz, float _d, float iw, float ih, float pw, float ph)
-        :eye(x, y ,z), w(-vx, -vy, -vz), d(_d){
+        :eye(x, y ,z), d(_d), w(-vx, -vy, -vz){
         vect dir(vx, vy, vz);
         vect tmp(0, 1, 0);
         u = cross_product(dir, tmp);

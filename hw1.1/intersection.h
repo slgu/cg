@@ -14,7 +14,6 @@ public:
         for (int i = 0; i < c->nx; ++i)
             for (int j = 0; j < c->ny; ++j) {
                 //generate ray
-                bool flg = false;
                 ray r = c->generate_ray(i, j);
                 Rgba & rgb = pixels[j][i];
                 rgb.r = rgb.b = rgb.g = 0;

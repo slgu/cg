@@ -1,2 +1,3 @@
+Compiled by c++ 11
 Mac Os: just make and wil generate a raytra target.
 Linux: modify Make file header file position from "/usr/local/include/OpenEXR" to "/usr/include/OpenEXR"
