@@ -25,6 +25,9 @@ void plight::calculate_rgb(point & intersect_p, vect & n, material & m,
     vect h = l + inter;
     norm(h);
     extent = inner_product(n, h);
+    if (extent < 0) extent = 0;
+    //set exponent extent
+    extent = pow(extent, m.r);
     r += extent * color[0] * m.sr;
     g += extent * color[1] * m.sg;
     b += extent * color[2] * m.sb;

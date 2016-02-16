@@ -22,8 +22,9 @@ public:
     float ir;
     float ig;
     float ib;
-    material(float _dr, float _dg, float _db, float _sr, float _sg, float _sb, float _ir, float _ig, float _ib)
-        :dr(_dr), dg(_dg), db(_db), sr(_sr), sg(_sg), sb(_sb), ir(_ir), ig(_ig), ib(_ib) {
+    float r;
+    material(float _dr, float _dg, float _db, float _sr, float _sg, float _sb, float _r, float _ir, float _ig, float _ib)
+        :dr(_dr), dg(_dg), db(_db), sr(_sr), sg(_sg), sb(_sb), r(_r), ir(_ir), ig(_ig), ib(_ib) {
         
     }
     //for debug

@@ -200,10 +200,11 @@ void parseSceneFile (char *filnam, shared_ptr <intersection> & scene)
                 sr = getTokenAsFloat (line, 4);
                 sg = getTokenAsFloat (line, 5);
                 sb = getTokenAsFloat (line, 6);
-                ir = getTokenAsFloat (line, 7);
-                ig = getTokenAsFloat (line, 8);
-                ib = getTokenAsFloat (line, 9);
-                material_ptr.reset(new material(dr, dg, db, sr, sg, sb, ir, ig, ib));
+                r = getTokenAsFloat(line, 7);
+                ir = getTokenAsFloat (line, 8);
+                ig = getTokenAsFloat (line, 9);
+                ib = getTokenAsFloat (line, 10);
+                material_ptr.reset(new material(dr, dg, db, sr, sg, sb, r, ir, ig, ib));
 #ifdef IM_DEBUGGING
                 material_ptr->debug();
 #endif
