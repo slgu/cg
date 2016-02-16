@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D0A750B21C73D542004B7047 /* intersection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0A750B11C73D542004B7047 /* intersection.cpp */; };
 		D0CD82141C72AC07007709F3 /* parse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0CD82131C72AC07007709F3 /* parse.cpp */; };
 		D0CD82171C72B350007709F3 /* material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0CD82151C72B350007709F3 /* material.cpp */; };
 		D0CD821A1C72B3B0007709F3 /* light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0CD82181C72B3B0007709F3 /* light.cpp */; };
@@ -26,6 +27,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D0A750B11C73D542004B7047 /* intersection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = intersection.cpp; sourceTree = "<group>"; };
 		D0CD82061C72ABBD007709F3 /* camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = camera.h; sourceTree = "<group>"; };
 		D0CD82071C72ABBD007709F3 /* exr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = exr.h; sourceTree = "<group>"; };
 		D0CD82081C72ABBD007709F3 /* helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = helper.h; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 				D0CD82161C72B350007709F3 /* material.hpp */,
 				D0CD82181C72B3B0007709F3 /* light.cpp */,
 				D0CD82191C72B3B0007709F3 /* light.hpp */,
+				D0A750B11C73D542004B7047 /* intersection.cpp */,
 			);
 			path = cg;
 			sourceTree = "<group>";
@@ -156,6 +159,7 @@
 				D0CD82171C72B350007709F3 /* material.cpp in Sources */,
 				D0EAEA461C728A45003C55DF /* main.cpp in Sources */,
 				D0CD821A1C72B3B0007709F3 /* light.cpp in Sources */,
+				D0A750B21C73D542004B7047 /* intersection.cpp in Sources */,
 				D0CD82141C72AC07007709F3 /* parse.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

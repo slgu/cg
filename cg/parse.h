@@ -8,6 +8,8 @@
 
 #ifndef parse_h
 #define parse_h
+#define IM_DEBUGGING
+
 #include "intersection.h"
 void parseSceneFile (char *filnam, std::shared_ptr <intersection> & scene);
 

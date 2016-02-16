@@ -17,8 +17,6 @@ using namespace std;
 #include "surface.h"
 #include "sphere.h"
 #include "material.hpp"
-#define IM_DEBUGGING
-
 
 //read float from input stream
 float getTokenAsFloat (string inString, int whichToken)
@@ -84,13 +82,13 @@ void parseSceneFile (char *filnam, shared_ptr <intersection> & scene)
     // you will set its material to lastMaterialLoaded.
     
     
+    std::shared_ptr <material> material_ptr;
     while (! inFile.eof ()) {   // go through every line in the file until finished
         
         getline (inFile, line); // get the line
         sphere * sphere_ptr;
         camera * camera_ptr;
         plight * plight_ptr;
-        std::shared_ptr <material> material_ptr;
         switch (line[0])  {     // we'll decide which command based on the first character
                 
                 //
@@ -206,6 +204,9 @@ void parseSceneFile (char *filnam, shared_ptr <intersection> & scene)
                 ig = getTokenAsFloat (line, 8);
                 ib = getTokenAsFloat (line, 9);
                 material_ptr.reset(new material(dr, dg, db, sr, sg, sb, ir, ig, ib));
+#ifdef IM_DEBUGGING
+                material_ptr->debug();
+#endif
                 break;
             case '/':
                 // don't do anything, it's a comment
