@@ -31,7 +31,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "30"
             endingLineNumber = "30"
-            landmarkName = "plight::calculate_rgb(point &amp; intersect_p, vect &amp; n, material &amp; m, vect &amp; inter, float &amp; r, float g, float b)"
+            landmarkName = "plight::calculate_rgb(point &amp; intersect_p, vect &amp; n, material &amp; m, vect &amp; inter, float &amp; r, float &amp; g, float &amp; b)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

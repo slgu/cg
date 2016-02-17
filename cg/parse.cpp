@@ -89,6 +89,7 @@ void parseSceneFile (char *filnam, shared_ptr <intersection> & scene)
         sphere * sphere_ptr;
         camera * camera_ptr;
         plight * plight_ptr;
+        alight * alight_ptr;
         switch (line[0])  {     // we'll decide which command based on the first character
                 
                 //
@@ -176,6 +177,12 @@ void parseSceneFile (char *filnam, shared_ptr <intersection> & scene)
                     case 'd':   // directional light
                         break;
                     case 'a':   // ambient light
+                        
+                        r = getTokenAsFloat (line, 2);
+                        g = getTokenAsFloat(line, 3);
+                        b = getTokenAsFloat(line, 4);
+                        alight_ptr = new alight(r, g, b);
+                        scene->add_light(alight_ptr);
                         break;
                         
                 }

@@ -16,7 +16,7 @@ void intersection::get_intersection(std::string filename) {
         for (int j = 0; j < c->ny; ++j) {
             //generate ray
             ray ry = c->generate_ray(i, j);
-            Rgba & rgb = pixels[j][i];
+            Rgba & rgb = pixels[c-> ny - 1 - j][i];
             rgb.r = rgb.b = rgb.g = 0;
             bool flg = false;
             float t0 = -1;
@@ -47,7 +47,7 @@ void intersection::get_intersection(std::string filename) {
             //faxiangliang
             vect n = nearest_surface->get_n(intersect_p);
             for (auto light = lights.begin(); light != lights.end(); ++light) {
-                float tmp_r, tmp_g, tmp_b;
+                float tmp_r = 0, tmp_g = 0, tmp_b = 0;
                 (*light)->calculate_rgb(intersect_p, n, m, inter, tmp_r, tmp_g, tmp_b);
                 //light shadow check TODO
                 r += tmp_r;

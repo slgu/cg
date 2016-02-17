@@ -10,7 +10,7 @@
 #include "helper.h"
 
 void plight::calculate_rgb(point & intersect_p, vect & n, material & m,
-                           vect & inter, float & r, float g, float b) {
+                           vect & inter, float & r, float & g, float & b) {
     //diffuse
     vect l = p - intersect_p;
     norm(l);
@@ -31,4 +31,13 @@ void plight::calculate_rgb(point & intersect_p, vect & n, material & m,
     r += extent * color[0] * m.sr;
     g += extent * color[1] * m.sg;
     b += extent * color[2] * m.sb;
+}
+
+void alight::calculate_rgb(point & intersect_p, vect & n, material & m,
+                           vect & inter, float & r, float & g, float & b) {
+    /*
+    r = 0.1 * color[0];
+    g = 0.1 * color[1];
+    b = 0.1 * color[2];
+     */
 }

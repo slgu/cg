@@ -16,7 +16,7 @@
 class light {
 public:
     virtual void calculate_rgb(point & intersect_p, vect & n, material & m,
-                               vect & inter, float & r, float g, float b) = 0;
+                               vect & inter, float & r, float & g, float & b) = 0;
 };
 
 class plight : public light {
@@ -31,6 +31,19 @@ public:
     }
     
     virtual void calculate_rgb(point & intersect_p, vect & n, material & m,
-                               vect & inter, float & r, float g, float b);
+                               vect & inter, float & r, float & g, float & b);
 };
+
+class alight: public light {
+public:
+    float color[3];
+    alight(float r, float g, float b) {
+        color[0] = r;
+        color[1] = g;
+        color[2] = b;
+    }
+    virtual void calculate_rgb(point & intersect_p, vect & n, material & m,
+                               vect & inter, float & r, float & g, float & b);
+};
+
 #endif /* light_hpp */
