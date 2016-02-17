@@ -15,7 +15,6 @@ using namespace std;
 #include "camera.h"
 #include "intersection.h"
 #include "surface.h"
-#include "sphere.h"
 #include "material.hpp"
 
 //read float from input stream
@@ -90,6 +89,7 @@ void parseSceneFile (char *filnam, shared_ptr <intersection> & scene)
         camera * camera_ptr;
         plight * plight_ptr;
         alight * alight_ptr;
+        plane * plane_ptr;
         switch (line[0])  {     // we'll decide which command based on the first character
                 
                 //
@@ -130,15 +130,22 @@ void parseSceneFile (char *filnam, shared_ptr <intersection> & scene)
                 break;
                 
             case 'p':   // plane
+                float d;
+                x = getTokenAsFloat (line, 1);
+                y = getTokenAsFloat (line, 2);
+                z = getTokenAsFloat (line, 3);
+                d = getTokenAsFloat (line, 4);
+                plane_ptr = new plane(x, y, z, d);
+                plane_ptr->set_material(material_ptr);
+                scene->add_obj(plane_ptr);
                 break;
-                
                 //
                 // camera:
                 //
             case 'c':   // camera
                 // one trick here: the cameras pixel count (width, height) are integers,
                 // so cast them.
-                float vx, vy, vz, d, iw, ih, pw, ph;
+                float vx, vy, vz, iw, ih, pw, ph;
                 x = getTokenAsFloat (line, 1);
                 y = getTokenAsFloat (line, 2);
                 z = getTokenAsFloat (line, 3);

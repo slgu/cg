@@ -1,10 +1,10 @@
 #pragma once
 #include "vect.h"
 class point {
+public:
     float x;
     float y;
     float z;
-public:
     point(float _x, float _y, float _z) {
         x = _x;
         y = _y;

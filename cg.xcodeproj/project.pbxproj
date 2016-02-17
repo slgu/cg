@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D0465C721C7403850076CD1A /* surface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0465C711C7403850076CD1A /* surface.cpp */; };
 		D0A750B21C73D542004B7047 /* intersection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0A750B11C73D542004B7047 /* intersection.cpp */; };
 		D0CD82141C72AC07007709F3 /* parse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0CD82131C72AC07007709F3 /* parse.cpp */; };
 		D0CD82171C72B350007709F3 /* material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0CD82151C72B350007709F3 /* material.cpp */; };
@@ -27,6 +28,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D0465C711C7403850076CD1A /* surface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = surface.cpp; sourceTree = "<group>"; };
 		D0A750B11C73D542004B7047 /* intersection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = intersection.cpp; sourceTree = "<group>"; };
 		D0CD82061C72ABBD007709F3 /* camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = camera.h; sourceTree = "<group>"; };
 		D0CD82071C72ABBD007709F3 /* exr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = exr.h; sourceTree = "<group>"; };
@@ -35,7 +37,6 @@
 		D0CD820A1C72ABBD007709F3 /* plane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = plane.h; sourceTree = "<group>"; };
 		D0CD820B1C72ABBD007709F3 /* point.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = point.h; sourceTree = "<group>"; };
 		D0CD820C1C72ABBD007709F3 /* ray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ray.h; sourceTree = "<group>"; };
-		D0CD820E1C72ABBD007709F3 /* sphere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sphere.h; sourceTree = "<group>"; };
 		D0CD820F1C72ABBD007709F3 /* surface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = surface.h; sourceTree = "<group>"; };
 		D0CD82101C72ABBD007709F3 /* vect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vect.h; sourceTree = "<group>"; };
 		D0CD82121C72ABF8007709F3 /* parse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = parse.h; sourceTree = "<group>"; };
@@ -85,7 +86,6 @@
 				D0CD820A1C72ABBD007709F3 /* plane.h */,
 				D0CD820B1C72ABBD007709F3 /* point.h */,
 				D0CD820C1C72ABBD007709F3 /* ray.h */,
-				D0CD820E1C72ABBD007709F3 /* sphere.h */,
 				D0CD820F1C72ABBD007709F3 /* surface.h */,
 				D0CD82101C72ABBD007709F3 /* vect.h */,
 				D0EAEA451C728A45003C55DF /* main.cpp */,
@@ -96,6 +96,7 @@
 				D0CD82181C72B3B0007709F3 /* light.cpp */,
 				D0CD82191C72B3B0007709F3 /* light.hpp */,
 				D0A750B11C73D542004B7047 /* intersection.cpp */,
+				D0465C711C7403850076CD1A /* surface.cpp */,
 			);
 			path = cg;
 			sourceTree = "<group>";
@@ -161,6 +162,7 @@
 				D0CD821A1C72B3B0007709F3 /* light.cpp in Sources */,
 				D0A750B21C73D542004B7047 /* intersection.cpp in Sources */,
 				D0CD82141C72AC07007709F3 /* parse.cpp in Sources */,
+				D0465C721C7403850076CD1A /* surface.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

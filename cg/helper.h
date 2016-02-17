@@ -1,5 +1,6 @@
 #pragma once
 #include "vect.h"
+#include "point.h"
 #include <cmath>
 inline void norm(vect &d) {
     float sum = d.x * d.x + d.y * d.y + d.z * d.z;
@@ -17,5 +18,9 @@ inline vect cross_product(const vect & v1, const vect & v2) {
 }
 
 inline float inner_product(const vect & v1, const vect & v2) {
+    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+}
+
+inline float inner_product(const point & v1, const vect & v2) {
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
