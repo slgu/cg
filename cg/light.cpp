@@ -35,9 +35,8 @@ void plight::calculate_rgb(point & intersect_p, vect & n, material & m,
 
 void alight::calculate_rgb(point & intersect_p, vect & n, material & m,
                            vect & inter, float & r, float & g, float & b) {
-    /*
+    
     r = 0.1 * color[0];
     g = 0.1 * color[1];
     b = 0.1 * color[2];
-     */
 }

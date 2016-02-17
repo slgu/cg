@@ -43,12 +43,12 @@ void intersection::get_intersection(std::string filename) {
             point intersect_p = ry.get_t(t0);
             //get material
             material & m = (*nearest_surface->m);
-            vect inter = ry.dir;
+            vect v = -ry.dir;
             //faxiangliang
             vect n = nearest_surface->get_n(intersect_p);
             for (auto light = lights.begin(); light != lights.end(); ++light) {
                 float tmp_r = 0, tmp_g = 0, tmp_b = 0;
-                (*light)->calculate_rgb(intersect_p, n, m, inter, tmp_r, tmp_g, tmp_b);
+                (*light)->calculate_rgb(intersect_p, n, m, v, tmp_r, tmp_g, tmp_b);
                 //light shadow check TODO
                 r += tmp_r;
                 g += tmp_g;

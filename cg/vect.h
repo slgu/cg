@@ -26,4 +26,7 @@ public:
     friend vect operator*(float a, const vect & o1) {
         return vect(a * o1.x, a * o1.y, a * o1.z);
     }
+    vect operator-() const{
+        return vect(-x,-y,-z);
+    }
 };
