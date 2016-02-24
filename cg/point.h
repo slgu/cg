@@ -17,7 +17,7 @@ public:
     }
     
     void debug() {
-        std::cout << "point " << x << "," << y << "," << z;
+        std::cout << "point " << x << "," << y << "," << z << std::endl;
     }
     vect operator-(const point & o) const{
         return vect(x - o.x, y - o.y, z - o.z);

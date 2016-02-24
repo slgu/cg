@@ -138,7 +138,7 @@ void parseSceneFile (char *filnam, shared_ptr <intersection> & scene)
                 x3 = getTokenAsFloat (line, 7);
                 y3 = getTokenAsFloat (line, 8);
                 z3 = getTokenAsFloat (line, 9);
-                tri_ptr = new tri(x1,y1,z2,x2,y2,z2,x3,y3,z3);
+                tri_ptr = new tri(x1,y1,z1,x2,y2,z2,x3,y3,z3);
                 tri_ptr->set_material(material_ptr);
                 scene->add_obj(tri_ptr);
                 break;

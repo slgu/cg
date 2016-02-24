@@ -11,6 +11,7 @@ public:
         m = _m;
     }
     virtual vect get_n(const point & p)  = 0;
+    virtual std::string debug() = 0;
 };
 
 class sphere : public surface {
@@ -25,6 +26,9 @@ public:
     virtual vect get_n(const point & p) {
         return p - o;
     }
+    std::string debug() {
+        return "sphere";
+    }
 };
 
 class plane : public surface {
@@ -38,6 +42,9 @@ public:
     virtual bool intersect(ray & _r, float & t);
     virtual vect get_n(const point & p) {
         return n;
+    }
+    std::string debug() {
+        return "plane";
     }
 };
 /*definition for triangle*/
@@ -57,10 +64,12 @@ public:
         vect v3_2 = p3 - p2;
         nrml = cross_product(v2_1, v3_2);
         norm(nrml);
-        nrml.debug();
     }
     virtual bool intersect(ray & _r, float & t);
     virtual vect get_n(const point & p) {
         return nrml;
+    }
+    std::string debug() {
+        return "tri";
     }
 };

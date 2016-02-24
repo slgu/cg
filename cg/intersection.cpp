@@ -79,6 +79,7 @@ bool intersection::trace(ray & ry, float & t0, shared_ptr<surface> & nearest_sur
     if (!flg) {
         return false;
     }
-    else
+    else {
         return true;
+    }
 }
