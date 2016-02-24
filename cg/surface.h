@@ -2,6 +2,7 @@
 #include "helper.h"
 #include "ray.h"
 #include "material.hpp"
+#include <memory>
 class surface {
 public:
     std::shared_ptr <material> m;
@@ -37,5 +38,29 @@ public:
     virtual bool intersect(ray & _r, float & t);
     virtual vect get_n(const point & p) {
         return n;
+    }
+};
+/*definition for triangle*/
+class tri : public surface {
+private:
+    point p1;
+    point p2;
+    point p3;
+    vect nrml;//norm of the plane of triangle
+public:
+    tri(float x1, float y1, float z1,
+        float x2, float y2, float z2,
+        float x3, float y3, float z3)
+    :p1(x1, y1, z1), p2(x2, y2, z2), p3(x3, y3, z3){
+        //calculate nrml using cross product
+        vect v2_1 = p2 - p1;
+        vect v3_2 = p3 - p2;
+        nrml = cross_product(v2_1, v3_2);
+        norm(nrml);
+        nrml.debug();
+    }
+    virtual bool intersect(ray & _r, float & t);
+    virtual vect get_n(const point & p) {
+        return nrml;
     }
 };

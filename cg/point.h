@@ -15,6 +15,10 @@ public:
         y = 0;
         z = 0;
     }
+    
+    void debug() {
+        std::cout << "point " << x << "," << y << "," << z;
+    }
     vect operator-(const point & o) const{
         return vect(x - o.x, y - o.y, z - o.z);
     }

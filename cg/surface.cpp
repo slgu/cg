@@ -28,7 +28,7 @@ bool sphere::intersect(ray & _r, float & t) {
 }
 
 bool plane::intersect(ray & _r, float & t) {
-    std::cout << "intersect in plane" << std::endl;
+    //std::cout << "intersect in plane" << std::endl;
     float d_n  = inner_product(n, _r.dir);
     if (d_n == 0) { //maybe eps
         return false;
@@ -38,4 +38,25 @@ bool plane::intersect(ray & _r, float & t) {
     if (t < 0)
         return false;
     return true;
+}
+
+bool tri::intersect(ray & _r, float & t) {
+    //calculate t first
+    t = inner_product(p1 - _r.origin, nrml) / inner_product(_r.dir, nrml);
+    if (t < 0)
+        return false;
+    //check inside the tri
+    point x = _r.get_t(t);
+    vect v2_1 = p2 - p1;
+    vect v3_2 = p3 - p2;
+    vect v1_3 = p1 - p3;
+    vect vx_1 = x - p1;
+    vect vx_2 = x - p2;
+    vect vx_3 = x - p3;
+    if (inner_product(cross_product(v2_1, vx_1), nrml) > 0
+        && inner_product(cross_product(v3_2, vx_2), nrml) > 0
+        && inner_product(cross_product(v1_3, vx_3), nrml) > 0) {
+        return true;
+    }
+    return false;
 }

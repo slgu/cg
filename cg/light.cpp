@@ -35,9 +35,26 @@ void plight::calculate_rgb(point & intersect_p, vect & n, material & m,
 
 void alight::calculate_rgb(point & intersect_p, vect & n, material & m,
                            vect & inter, float & r, float & g, float & b) {
-    /*
-    r = 0.1 * color[0];
-    g = 0.1 * color[1];
-    b = 0.1 * color[2];
-     */
+    
+    r = m.dr * color[0];
+    g = m.dg * color[1];
+    b = m.db * color[2];
+}
+
+bool alight::check_ambient() {
+    return true;
+}
+
+bool plight::check_ambient() {
+    return false;
+}
+
+ray alight::generate_shadow_ray(const point & inter_p) {
+    return ray(point(0,0,0), vect(0,0,0));
+}
+
+ray plight::generate_shadow_ray(const point & inter_p) {
+    vect dir = p - inter_p;
+    norm(dir);
+    return ray(inter_p, dir);
 }

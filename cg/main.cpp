@@ -12,10 +12,10 @@
 int main (int argc, char *argv[]) {
     /*
     if (argc != 3) {
-        std::cerr << "useage: ./raytra scenefilename outputopenexr" << std::endl;
+        std::cerr << "useage: ./prog_out scenefilename outputopenexr" << std::endl;
         return -1;
     }
-    */
+     */
     std::shared_ptr <intersection> scene(new intersection());
     parseSceneFile ("/Users/slgu1/Desktop/test", scene);
     scene->get_intersection("/Users/slgu1/Desktop/test.exr");

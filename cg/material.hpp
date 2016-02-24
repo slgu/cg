@@ -19,10 +19,10 @@ public:
     float sr;
     float sg;
     float sb;
+    float r;
     float ir;
     float ig;
     float ib;
-    float r;
     material(float _dr, float _dg, float _db, float _sr, float _sg, float _sb, float _r, float _ir, float _ig, float _ib)
         :dr(_dr), dg(_dg), db(_db), sr(_sr), sg(_sg), sb(_sb), r(_r), ir(_ir), ig(_ig), ib(_ib) {
         

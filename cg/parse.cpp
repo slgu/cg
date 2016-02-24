@@ -90,6 +90,7 @@ void parseSceneFile (char *filnam, shared_ptr <intersection> & scene)
         plight * plight_ptr;
         alight * alight_ptr;
         plane * plane_ptr;
+        tri * tri_ptr;
         switch (line[0])  {     // we'll decide which command based on the first character
                 
                 //
@@ -127,8 +128,20 @@ void parseSceneFile (char *filnam, shared_ptr <intersection> & scene)
                 break;
                 
             case 't':   // triangle
+                float x1,y1,z1,x2,y2,z2,x3,y3,z3;
+                x1 = getTokenAsFloat(line, 1);
+                y1 = getTokenAsFloat (line, 2);
+                z1 = getTokenAsFloat (line, 3);
+                x2 = getTokenAsFloat (line, 4);
+                y2 = getTokenAsFloat (line, 5);
+                z2 = getTokenAsFloat (line, 6);
+                x3 = getTokenAsFloat (line, 7);
+                y3 = getTokenAsFloat (line, 8);
+                z3 = getTokenAsFloat (line, 9);
+                tri_ptr = new tri(x1,y1,z2,x2,y2,z2,x3,y3,z3);
+                tri_ptr->set_material(material_ptr);
+                scene->add_obj(tri_ptr);
                 break;
-                
             case 'p':   // plane
                 float d;
                 x = getTokenAsFloat (line, 1);
@@ -191,7 +204,6 @@ void parseSceneFile (char *filnam, shared_ptr <intersection> & scene)
                         alight_ptr = new alight(r, g, b);
                         scene->add_light(alight_ptr);
                         break;
-                        
                 }
                 
                 break;

@@ -12,11 +12,14 @@
 #include <stdio.h>
 #include "point.h"
 #include "material.hpp"
+#include "ray.h"
 //point light
 class light {
 public:
     virtual void calculate_rgb(point & intersect_p, vect & n, material & m,
                                vect & inter, float & r, float & g, float & b) = 0;
+    virtual bool check_ambient() = 0;
+    virtual ray generate_shadow_ray(const point & inter_p) = 0;
 };
 
 class plight : public light {
@@ -32,6 +35,8 @@ public:
     
     virtual void calculate_rgb(point & intersect_p, vect & n, material & m,
                                vect & inter, float & r, float & g, float & b);
+    virtual bool check_ambient();
+    virtual ray generate_shadow_ray(const point & inter_p);
 };
 
 class alight: public light {
@@ -44,6 +49,8 @@ public:
     }
     virtual void calculate_rgb(point & intersect_p, vect & n, material & m,
                                vect & inter, float & r, float & g, float & b);
+    virtual bool check_ambient();
+    virtual ray generate_shadow_ray(const point & inter_p);
 };
 
 #endif /* light_hpp */
