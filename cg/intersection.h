@@ -8,9 +8,9 @@
 class intersection {
     //camera
 public:
-    const int SHADOW_RAY = 1;
-    const int NORMAL_RAY = 0;
-    const int SHADOW_COE = 1;
+    static const int SHADOW_RAY = 1;
+    static const int NORMAL_RAY = 0;
+    static const int SHADOW_COE = 1;
     shared_ptr <camera> c;
     //multiple lights
     std::vector < shared_ptr <light> > lights;
