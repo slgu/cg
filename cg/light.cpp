@@ -49,12 +49,12 @@ bool plight::check_ambient() {
     return false;
 }
 
-ray alight::generate_shadow_ray(const point & inter_p) {
+ray alight::generate_shadow_ray(const point & inter_p, float & t) {
     return ray(point(0,0,0), vect(0,0,0));
 }
 
-ray plight::generate_shadow_ray(const point & inter_p) {
+ray plight::generate_shadow_ray(const point & inter_p, float & t) {
     vect dir = p - inter_p;
-    norm(dir);
+    t = norm(dir);
     return ray(inter_p, dir);
 }

@@ -2,12 +2,13 @@
 #include "vect.h"
 #include "point.h"
 #include <cmath>
-inline void norm(vect &d) {
+inline int norm(vect &d) {
     float sum = d.x * d.x + d.y * d.y + d.z * d.z;
     sum = sqrt(sum);
     d.x = d.x / sum;
     d.y = d.y / sum;
     d.z = d.z / sum;
+    return sum;
 }
 
 inline vect cross_product(const vect & v1, const vect & v2) {

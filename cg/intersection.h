@@ -10,12 +10,16 @@ class intersection {
 public:
     static const int SHADOW_RAY = 1;
     static const int NORMAL_RAY = 0;
-    static const int SHADOW_COE = 1;
+    const float SHADOW_COE;
     shared_ptr <camera> c;
     //multiple lights
     std::vector < shared_ptr <light> > lights;
     //multiple objs
     std::vector < shared_ptr <surface> > objs;
+    //init
+    intersection():SHADOW_COE(0.001){
+        
+    }
     //get intersection and save the result
     void get_intersection(std::string filename);
     bool trace(ray & ry, float & t0, shared_ptr<surface> & nearest_surface, int type);

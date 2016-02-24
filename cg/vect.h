@@ -16,7 +16,7 @@ public:
         z = 0;
     }
     void debug() {
-        std::cout << "vec " << x << "," << y << "," << z;
+        std::cout << "vec " << x << "," << y << "," << z << std::endl;
     }
     friend vect operator-(const vect & o1, const vect & o2) {
         return vect(o1.x - o2.x, o1.y - o2.y, o1.z - o2.z);
