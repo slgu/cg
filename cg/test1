@@ -1,21 +1,46 @@
-/ simple test scene file, all units in mm.
+/ camera: pointing towards -Z, 35mmx25mm "film", 35mm focal length
+/ making 320x240 pixels
+c 24.2 29.3 53.6 0.0 0.0 -1.0 35.0 35.0 25.0 320 240
  
-/ a red material, w/ white specular highlight, no reflection
-m 0.7 0.0 0.0 0.5 0.5 0.5 100. 0.0 0.0 0.0
+/ alternate camera:
+/ c 170. 222. 83. -.5 -.7 -.5 35.0 35.0 25.0 320 240
  
-/ one sphere in the above material
-s 0. 13.67 -62.57 10.
- 
-/ a grey material with no specular, no reflection
+// grey diffuse material
 m 0.5 0.5 0.5 0.0 0.0 0.0 0.0 0.0 0.0 0.0
  
-/ a grey ground plane made up of two triangles, no specular, no reflection
-t -500.00 -0.00 500.00 500.00 -0.00 500.00 -500.00 0.00 -500.00
-t -500.00 0.00 -500.00 500.00 -0.00 500.00 500.00 0.00 -500.00
+/ ground plane: two large triangles
+t -500.0 -22.0 500.0 500.0 -22.0 500.0 -500.0 -22.0 -500.0
+t -500.0 -22.0 -500.0 500.0 -22.0 500.00 500.0 -22.0 -500.0
  
-/ one point light, white
+/ one point light:
 l p -80. 120. -46.6 1.0 1.0 1.0
  
-/ camera: pointing towards -Z, 35mmx25mm "film", 35mm focal length
-/ making 160x120 pixels
-c 24.2 29.3 53.6 0.0 0.0 -1.0 35.0 35.0 25.0 160 120
+/ one ambient light
+l a .15 .15 .15
+ 
+/ red material, w/ specular highlight
+m 0.7 0.0 0.0 0.5 0.5 0.5 100. 0.0 0.0 0.0
+ 
+/ 8 spheres: red
+s -20.0 13.67 -62.56 10.
+s -20.0 70.0 -62.56 10.
+s 10.0 -10.0 -62.56 10.
+s 10.0 40.0 -62.56 10.
+s 40.0 13.67 -62.56 10.
+s 40.0 70.0 -62.56 10.
+s 70.0 -10.0 -62.56 10.
+s 70.0 40.0 -62.56 10.
+ 
+/ new material: reflective silver!
+m 0.7 0.7 0.7 0.7 0.7 0.7 100. 0.7 0.7 0.7
+ 
+/ 8 spheres: reflective silver:
+ 
+s -20.0 -10.0 -62.56 10.
+s -20.0 40.0 -62.56 10.
+s 10.0 13.67 -62.56 10.
+s 10.0 70.0 -62.56 10.
+s 40.0 -10.0 -62.56 10.
+s 40.0 40.0 -62.56 10.
+s 70.0 13.67 -62.56 10.
+s 70.0 70.0 -62.56 10.

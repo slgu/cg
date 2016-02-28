@@ -17,7 +17,7 @@ int main (int argc, char *argv[]) {
     }
      */
     std::shared_ptr <intersection> scene(new intersection());
-    parseSceneFile ("/Users/slgu1/Desktop/test", scene);
+    parseSceneFile("/Users/slgu1/Desktop/test", scene);
     scene->get_intersection("/Users/slgu1/Desktop/test.exr");
     return 0;
 }

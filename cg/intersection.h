@@ -37,4 +37,5 @@ public:
         shared_ptr <light> tmp(l);
         lights.push_back(tmp);
     }
+    Rgba recur_ray_cal(ray & ry, int depth);
 };
