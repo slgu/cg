@@ -16,7 +16,7 @@ using namespace std;
 #include "intersection.h"
 #include "surface.h"
 #include "material.hpp"
-
+#include "parse.h"
 //read float from input stream
 float getTokenAsFloat (string inString, int whichToken)
 {
@@ -59,7 +59,7 @@ float getTokenAsFloat (string inString, int whichToken)
 // read the scene file.
 //
 //
-void parseSceneFile (char *filnam, shared_ptr <intersection> & scene)
+void Parser::parse_scene_file(char *filnam, shared_ptr <intersection> & scene)
 {
     
     ifstream inFile(filnam);    // open the file
@@ -247,4 +247,59 @@ void parseSceneFile (char *filnam, shared_ptr <intersection> & scene)
         }
         
     }
+}
+
+void Parser::parse_obj_file (char * fillnam, std::vector< int > &tris, std::vector< float > &verts) {
+    // clear out the tris and verts vectors:
+    tris.clear ();
+    verts.clear ();
+    ifstream in(fillnam);
+    char buffer[1025];
+    string cmd;
+    
+    for (int line=1; in.good(); line++) {
+        in.getline(buffer,1024);
+        buffer[in.gcount()]=0;
+        
+        cmd="";
+        
+        istringstream iss (buffer);
+        
+        iss >> cmd;
+        
+        if (cmd[0]=='#' or cmd.empty()) {
+            // ignore comments or blank lines
+            continue;
+        }
+        else if (cmd=="v") {
+            // got a vertex:
+            
+            // read in the parameters:
+            double pa, pb, pc;
+            iss >> pa >> pb >> pc;
+            
+            verts.push_back (pa);
+            verts.push_back (pb);
+            verts.push_back (pc);
+        }
+        else if (cmd=="f") {
+            // got a face (triangle)
+            
+            // read in the parameters:
+            int i, j, k;
+            iss >> i >> j >> k;
+            
+            // vertex numbers in OBJ files start with 1, but in C++ array
+            // indices start with 0, so we're shifting everything down by
+            // 1
+            tris.push_back (i-1);
+            tris.push_back (j-1);
+            tris.push_back (k-1);
+        }
+        else {
+            std::cerr << "Parser error: invalid command at line " << line << std::endl;
+        }
+        
+    }
+    in.close();
 }

@@ -11,6 +11,12 @@
 #define IM_DEBUGGING
 
 #include "intersection.h"
-void parseSceneFile (char *filnam, std::shared_ptr <intersection> & scene);
+class Parser {
+public:
+    //parse scene file
+    void parse_scene_file (char *filnam, std::shared_ptr <intersection> & scene);
+    //parse obj file
+    void parse_obj_file (char * fillnam, std::vector< int > &tris, std::vector< float > &verts);
+};
 
 #endif /* parse_h */

@@ -119,7 +119,7 @@ Rgba intersection::recur_ray_cal(ray & ry, int depth) {
     ray reflect_ray(ry.get_t(t0 * (1- SHADOW_COE)), reflect_ray_dir);
     Rgba res = recur_ray_cal(reflect_ray, depth - 1);
     float coe = inner_product(reflect_ray_dir, n);
-    coe = 1;
+    coe = 1;//N * r needed or not ?
     res.r = r + m.ir * coe * res.r;
     res.g = g + m.ig * coe * res.g;
     res.b = b + m.ib * coe * res.b;
