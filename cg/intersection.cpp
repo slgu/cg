@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 #include "intersection.h"
-//#define INTER_DEBUG
+#define INTER_DEBUG
 void intersection::get_intersection(std::string filename) {
     Array2D <Rgba> pixels;
     pixels.resizeErase(c->ny, c->nx);
@@ -21,7 +21,7 @@ void intersection::get_intersection(std::string filename) {
             ray ry = c->generate_ray(i, j);
             Rgba & rgb = pixels[c-> ny - 1 - j][i];
             rgb.r = rgb.b = rgb.g = 0;
-            Rgba res = recur_ray_cal(ry, 2);
+            Rgba res = recur_ray_cal(ry, 4);
             rgb.r = res.r;
             rgb.g = res.g;
             rgb.b = res.b;
@@ -119,6 +119,7 @@ Rgba intersection::recur_ray_cal(ray & ry, int depth) {
     ray reflect_ray(ry.get_t(t0 * (1- SHADOW_COE)), reflect_ray_dir);
     Rgba res = recur_ray_cal(reflect_ray, depth - 1);
     float coe = inner_product(reflect_ray_dir, n);
+    coe = 1;
     res.r = r + m.ir * coe * res.r;
     res.g = g + m.ig * coe * res.g;
     res.b = b + m.ib * coe * res.b;
