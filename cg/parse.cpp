@@ -242,27 +242,44 @@ void Parser::parse_scene_file(char *filnam, shared_ptr <intersection> & scene)
                 //
                 // options
                 //
-            case 'o':   // make your own options if you wish
+            case 'o':   // make your own opti		ons if you wish
+                break;
+            case 'w': //load an obj file
+                std::vector <int> tris;
+                std::vector <float> verts;
+                int idx = 2;
+                while (line[idx] == ' ') ++idx;
+                parse_obj_file(line.substr(idx).c_str(), tris, verts);
+                std::cout << line.substr(idx) << std::endl;
+                int n = int(tris.size()) / 3;
+                std::cout << n << std::endl;
+                for (int i = 0; i < n; ++i) {
+                    int idx1 = tris[3 * i];
+                    int idx2 = tris[3 * i + 1];
+                    int idx3 = tris[3 * i + 2];
+                    tri_ptr = new tri(verts[3 * idx1],verts[3 * idx1 + 1], verts[3 * idx1 + 2],
+                                      verts[3 * idx2],verts[3 * idx2 + 1], verts[3 * idx2 + 2],
+                                      verts[3 * idx3],verts[3 * idx3 + 1], verts[3 * idx3 + 2]);
+                    tri_ptr->set_material(material_ptr);
+                    scene->add_obj(tri_ptr);
+                }
+                std::cout << "fuckw" << std::endl;
                 break;
         }
-        
     }
 }
 
-void Parser::parse_obj_file (char * fillnam, std::vector< int > &tris, std::vector< float > &verts) {
+void Parser::parse_obj_file (const char * fillnam, std::vector< int > &tris, std::vector< float > &verts) {
     // clear out the tris and verts vectors:
     tris.clear ();
     verts.clear ();
     ifstream in(fillnam);
     char buffer[1025];
     string cmd;
-    
     for (int line=1; in.good(); line++) {
         in.getline(buffer,1024);
         buffer[in.gcount()]=0;
-        
         cmd="";
-        
         istringstream iss (buffer);
         
         iss >> cmd;

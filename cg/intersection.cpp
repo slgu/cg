@@ -21,7 +21,7 @@ void intersection::get_intersection(std::string filename) {
             ray ry = c->generate_ray(i, j);
             Rgba & rgb = pixels[c-> ny - 1 - j][i];
             rgb.r = rgb.b = rgb.g = 0;
-            Rgba res = recur_ray_cal(ry, 4);
+            Rgba res = recur_ray_cal(ry, 5);
             rgb.r = res.r;
             rgb.g = res.g;
             rgb.b = res.b;
