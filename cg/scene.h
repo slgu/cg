@@ -5,7 +5,7 @@
 #include "exr.h"
 #include "camera.h"
 #include "light.hpp"
-class intersection {
+class Scene {
     //camera
 public:
     static const int SHADOW_RAY = 1;
@@ -17,7 +17,7 @@ public:
     //multiple objs
     std::vector < shared_ptr <surface> > objs;
     //init
-    intersection():SHADOW_COE(0.001){
+    Scene():SHADOW_COE(0.001){
         
     }
     //get intersection and save the result

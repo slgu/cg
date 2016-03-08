@@ -3,6 +3,7 @@
 #include "ray.h"
 #include "material.hpp"
 #include <memory>
+#include <cassert>
 class surface {
 public:
     std::shared_ptr <material> m;
@@ -71,5 +72,47 @@ public:
     }
     std::string debug() {
         return "tri";
+    }
+};
+
+/*definition for aabb*/
+class AABB : public surface{
+private:
+    float xmin;
+    float xmax;
+    float ymin;
+    float ymax;
+    float zmin;
+    float zmax;
+    /* a surface it contains */
+    std::shared_ptr <surface> obj;
+public:
+    AABB(float _xmin, float _xmax, float _ymin, float _ymax, float _zmin, float _zmax):xmin(_xmin), xmax(_xmax)
+    , ymin(_ymin), ymax(_ymax), zmin(_zmin), zmax(_zmax){
+        obj = nullptr;
+    }
+    virtual vect get_n(const point & p) {
+        if (check_eps(p.x - xmin))
+            return vect(-1,0,0);
+        if (check_eps(p.x - xmax))
+            return vect(1,0,0);
+        if (check_eps(p.y - ymin))
+            return vect(0,-1,0);
+        if (check_eps(p.y - ymax))
+            return vect(0,1,0);
+        if (check_eps(p.z - zmin))
+            return vect(0,0,-1);
+        if (check_eps(p.z - zmax))
+            return vect(0,0,1);
+        //maybe wrong into this position
+        assert(false);
+        return vect(0,0,0);
+    }
+    std::string debug() {
+        return "AABB";
+    }
+    virtual bool intersect(ray & _r, float & t);
+    void set_obj(std::shared_ptr <surface> _obj) {
+        obj = _obj;
     }
 };

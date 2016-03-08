@@ -13,7 +13,7 @@
 
 using namespace std;
 #include "camera.h"
-#include "intersection.h"
+#include "scene.h"
 #include "surface.h"
 #include "material.hpp"
 #include "parse.h"
@@ -59,7 +59,7 @@ float getTokenAsFloat (string inString, int whichToken)
 // read the scene file.
 //
 //
-void Parser::parse_scene_file(char *filnam, shared_ptr <intersection> & scene)
+void Parser::parse_scene_file(char *filnam, shared_ptr <Scene> & scene)
 {
     
     ifstream inFile(filnam);    // open the file
@@ -250,9 +250,7 @@ void Parser::parse_scene_file(char *filnam, shared_ptr <intersection> & scene)
                 int idx = 2;
                 while (line[idx] == ' ') ++idx;
                 parse_obj_file(line.substr(idx).c_str(), tris, verts);
-                std::cout << line.substr(idx) << std::endl;
                 int n = int(tris.size()) / 3;
-                std::cout << n << std::endl;
                 for (int i = 0; i < n; ++i) {
                     int idx1 = tris[3 * i];
                     int idx2 = tris[3 * i + 1];
@@ -263,7 +261,6 @@ void Parser::parse_scene_file(char *filnam, shared_ptr <intersection> & scene)
                     tri_ptr->set_material(material_ptr);
                     scene->add_obj(tri_ptr);
                 }
-                std::cout << "fuckw" << std::endl;
                 break;
         }
     }

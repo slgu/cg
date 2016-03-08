@@ -7,9 +7,9 @@
 //
 
 #include <stdio.h>
-#include "intersection.h"
-#define INTER_DEBUG
-void intersection::get_intersection(std::string filename) {
+#include "scene.h"
+//#define INTER_DEBUG
+void Scene::get_intersection(std::string filename) {
     Array2D <Rgba> pixels;
     pixels.resizeErase(c->ny, c->nx);
     for (int i = 0; i < c->nx; ++i)
@@ -30,7 +30,7 @@ void intersection::get_intersection(std::string filename) {
 }
 
 //just trace the objs to see if intersection
-bool intersection::trace(ray & ry, float & t0, shared_ptr<surface> & nearest_surface, int type) {
+bool Scene::trace(ray & ry, float & t0, shared_ptr<surface> & nearest_surface, int type) {
     bool flg = false;
     if (type != SHADOW_RAY) {
         t0 = -1;
@@ -60,7 +60,7 @@ bool intersection::trace(ray & ry, float & t0, shared_ptr<surface> & nearest_sur
     }
 }
 
-Rgba intersection::recur_ray_cal(ray & ry, int depth) {
+Rgba Scene::recur_ray_cal(ray & ry, int depth) {
     shared_ptr<surface> nearest_surface = nullptr;
     
     //if depth = 0 return
@@ -119,7 +119,7 @@ Rgba intersection::recur_ray_cal(ray & ry, int depth) {
     ray reflect_ray(ry.get_t(t0 * (1- SHADOW_COE)), reflect_ray_dir);
     Rgba res = recur_ray_cal(reflect_ray, depth - 1);
     float coe = inner_product(reflect_ray_dir, n);
-    coe = 1;//N * r needed or not ?
+    coe = 0.8;//N * r needed or not ?
     res.r = r + m.ir * coe * res.r;
     res.g = g + m.ig * coe * res.g;
     res.b = b + m.ib * coe * res.b;

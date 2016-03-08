@@ -8,17 +8,15 @@
 
 #include <iostream>
 #include "parse.h"
-#include "intersection.h"
+#include "scene.h"
 int main (int argc, char *argv[]) {
-    /*
     if (argc != 3) {
         std::cerr << "useage: ./prog_out scenefilename outputopenexr" << std::endl;
         return -1;
     }
-     */
-    std::shared_ptr <intersection> scene(new intersection());
+    std::shared_ptr <Scene> scene(new Scene());
     Parser parser;
-    parser.parse_scene_file("/Users/slgu1/Desktop/test", scene);
-    scene->get_intersection("/Users/slgu1/Desktop/test.exr");
+    parser.parse_scene_file(argv[1], scene);
+    scene->get_intersection(argv[2]);
     return 0;
 }
