@@ -4,6 +4,10 @@
 #include "material.hpp"
 #include <memory>
 #include <cassert>
+/*definition for aabb*/
+class AABB;
+
+
 class surface {
 public:
     std::shared_ptr <material> m;
@@ -13,6 +17,7 @@ public:
     }
     virtual vect get_n(const point & p)  = 0;
     virtual std::string debug() = 0;
+    virtual std::shared_ptr <AABB> get_aabb() = 0;
 };
 
 class sphere : public surface {
@@ -30,7 +35,9 @@ public:
     std::string debug() {
         return "sphere";
     }
+    std::shared_ptr <AABB> get_aabb();
 };
+
 
 class plane : public surface {
     vect n;
@@ -47,22 +54,30 @@ public:
     std::string debug() {
         return "plane";
     }
+    
+    std::shared_ptr <AABB> get_aabb();
 };
+
 /*definition for triangle*/
 class tri : public surface {
 private:
-    point p1;
-    point p2;
-    point p3;
+    point p[3];
     vect nrml;//norm of the plane of triangle
 public:
     tri(float x1, float y1, float z1,
-        float x2, float y2, float z2,
-        float x3, float y3, float z3)
-    :p1(x1, y1, z1), p2(x2, y2, z2), p3(x3, y3, z3){
+        float x2, float y2, float z2, float x3, float y3, float z3) {
+        p[0].x = x1;
+        p[0].y = y1;
+        p[0].z = z1;
+        p[1].x = x2;
+        p[1].y = y2;
+        p[1].z = z2;
+        p[2].x = x3;
+        p[2].y = y3;
+        p[2].z = z3;
         //calculate nrml using cross product
-        vect v2_1 = p2 - p1;
-        vect v3_2 = p3 - p2;
+        vect v2_1 = p[1] - p[0];
+        vect v3_2 = p[2] - p[1];
         nrml = cross_product(v2_1, v3_2);
         norm(nrml);
     }
@@ -73,10 +88,11 @@ public:
     std::string debug() {
         return "tri";
     }
+    
+    std::shared_ptr <AABB> get_aabb();
 };
 
-/*definition for aabb*/
-class AABB : public surface{
+class AABB :public surface{
 public:
     float mmin[3];
     float mmax[3];
@@ -121,6 +137,7 @@ public:
     virtual bool intersect(ray & _r, float & t);
     void set_obj(std::shared_ptr <surface> _obj) {
         obj = _obj;
+        m = obj->m; // set material also
     }
     float get_volume() {
         float res = 1;
@@ -128,4 +145,10 @@ public:
             res *= (mmax[i] - mmin[i]);
         return res;
     }
+    std::shared_ptr <AABB> get_aabb() {
+        assert(false);
+        std::shared_ptr <AABB> res(this);
+        return res;
+    }
 };
+

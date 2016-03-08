@@ -29,8 +29,7 @@ void Scene::get_intersection(std::string filename) {
     write_exr_file(filename, &pixels[0][0], c->nx, c->ny);
 }
 
-//just trace the objs to see if intersection
-bool Scene::trace(ray & ry, float & t0, shared_ptr<surface> & nearest_surface, int type) {
+bool Scene::trace_normal(ray & ry, float & t0, shared_ptr<surface> & nearest_surface, int type) {
     bool flg = false;
     if (type != SHADOW_RAY) {
         t0 = -1;
@@ -58,6 +57,60 @@ bool Scene::trace(ray & ry, float & t0, shared_ptr<surface> & nearest_surface, i
     else {
         return true;
     }
+}
+
+bool Scene::trace_aabb(ray & ry, float & t0, shared_ptr<surface> & nearest_surface, int type) {
+    bool flg = false;
+    if (type != SHADOW_RAY) {
+        t0 = -1;
+    }
+    for (auto itr = boxes.begin(); itr != boxes.end(); ++itr) {
+        float tmp;
+        if ((*itr)->intersect(ry, tmp)) {
+            //if shadow no need nearest search
+            if (type == SHADOW_RAY) {
+                if (t0 > tmp)
+                    return true;
+            }
+            else {
+                flg = true;
+                if (t0 == -1 || t0 > tmp) {
+                    t0 = tmp;
+                    nearest_surface = *itr;
+                }
+            }
+        }
+    }
+    if (!flg) {
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+
+bool Scene::trace_bvh(ray & ry, float & t0, shared_ptr<surface> & nearest_surface, int type) {
+    //TODO
+    return false;
+}
+
+bool Scene::trace_bvh_aabb(ray & ry, float & t0, shared_ptr<surface> & nearest_surface, int type) {
+    //TODO
+    return false;
+}
+
+//just trace the objs to see if intersection
+bool Scene::trace(ray & ry, float & t0, shared_ptr<surface> & nearest_surface, int type) {
+    if (cmd == 0)
+        return trace_normal(ry, t0, nearest_surface, type);
+    else if (cmd == 1)
+        return trace_aabb(ry, t0, nearest_surface, type);
+    else if (cmd == 2)
+        return false;
+    else if (cmd == 3)
+        return false;
+    else
+        return false;
 }
 
 Rgba Scene::recur_ray_cal(ray & ry, int depth) {

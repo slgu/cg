@@ -17,7 +17,7 @@ bool cmpz(const std::shared_ptr<AABB> & a1, const std::shared_ptr<AABB> & a2) {
     return a1->mmin[2] < a2->mmin[2];
 }
 
-static void bvhsort(std::vector <std::shared_ptr<AABB>> &boxes, int i) {
+void bvh_node::bvhsort(std::vector <std::shared_ptr<AABB>> &boxes, int i) {
     if (i == 0)
         std::sort(boxes.begin(), boxes.end(), cmpx);
     else if (i == 1)
@@ -25,6 +25,7 @@ static void bvhsort(std::vector <std::shared_ptr<AABB>> &boxes, int i) {
     else
         std::sort(boxes.begin(), boxes.end(), cmpz);
 }
+
 //bvh tree for speeding up intersection with aabb
 std::shared_ptr <bvh_node> bvh_node::build(std::vector <std::shared_ptr<AABB>> &boxes) {
     int l = int(boxes.size());

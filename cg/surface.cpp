@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include "surface.h"
 #include <limits>
+
 bool sphere::intersect(ray & _r, float & t) {
     vect sub = _r.origin - o;
     float a = inner_product(_r.dir, sub);
@@ -42,17 +43,17 @@ bool plane::intersect(ray & _r, float & t) {
 
 bool tri::intersect(ray & _r, float & t) {
     //calculate t first
-    t = inner_product(p1 - _r.origin, nrml) / inner_product(_r.dir, nrml);
+    t = inner_product(p[0] - _r.origin, nrml) / inner_product(_r.dir, nrml);
     if (t < 0)
         return false;
     //check inside the tri
     point x = _r.get_t(t);
-    vect v2_1 = p2 - p1;
-    vect v3_2 = p3 - p2;
-    vect v1_3 = p1 - p3;
-    vect vx_1 = x - p1;
-    vect vx_2 = x - p2;
-    vect vx_3 = x - p3;
+    vect v2_1 = p[1] - p[0];
+    vect v3_2 = p[2] - p[1];
+    vect v1_3 = p[0] - p[2];
+    vect vx_1 = x - p[0];
+    vect vx_2 = x - p[1];
+    vect vx_3 = x - p[2];
     /*special judge for debug
     if(abs(x.x) > 500 || abs(x.z) > 500)
         return false;
@@ -94,7 +95,7 @@ bool AABB::intersect(ray &_r, float &t){
             return false;
     }
     else {
-        tmin = (mmin[0] - _r.origin.y) / _r.dir.y;
+        tmin = (mmin[1] - _r.origin.y) / _r.dir.y;
         tmax = (mmax[1] - _r.origin.y) / _r.dir.y;
         if (tmin > tmax)
             swap(tmin, tmax);
@@ -111,7 +112,7 @@ bool AABB::intersect(ray &_r, float &t){
                 return false;
         }
         else {
-            tmin = (mmin[1] - _r.origin.z) / _r.dir.z;
+            tmin = (mmin[2] - _r.origin.z) / _r.dir.z;
             tmax = (mmax[2] - _r.origin.z) / _r.dir.z;
             if (tmin > tmax)
                 swap(tmin, tmax);
@@ -122,5 +123,50 @@ bool AABB::intersect(ray &_r, float &t){
         }
     if (t_l > t_r)
         return false;
+    if (t_r < 0)
+        return false;
+    t = t_l;
+    printf("%.2f %.2f\n", t_l, t_r);
     return true;
+}
+
+std::shared_ptr <AABB> sphere::get_aabb() {
+    std::shared_ptr <AABB> res(new AABB(o.x - r, o.x + r, o.y - r, o.y + r, o.z - r, o.z + r));
+    return res;
+}
+
+std::shared_ptr <AABB> plane::get_aabb() {
+    float float_min = std::numeric_limits<float>::min();
+    float float_max = std::numeric_limits<float>::max();
+    std::shared_ptr <AABB> res(new AABB(float_min, float_max, float_min, float_max, float_min, float_max));
+    return res;
+}
+
+std::shared_ptr <AABB> tri::get_aabb() {
+    float float_min = std::numeric_limits<float>::min();
+    float float_max = std::numeric_limits<float>::max();
+    float mmin[3], mmax[3];
+    for (int i = 0; i < 3; ++i) {
+        mmin[i] = float_max;
+        mmax[i] = float_min;
+    }
+    for (int i = 0; i < 3; ++i) {
+        //x
+        if(p[i].x < mmin[0])
+            mmin[0] = p[i].x;
+        if(p[i].x > mmax[0])
+            mmax[0] = p[i].x;
+        //y
+        if(p[i].y < mmin[1])
+            mmin[1] = p[i].y;
+        if(p[i].y > mmax[1])
+            mmax[1] = p[i].y;
+        //z
+        if(p[i].z < mmin[2])
+            mmin[2] = p[i].z;
+        if(p[i].z > mmax[2])
+            mmax[2] = p[i].z;
+    }
+    std::shared_ptr<AABB>res(new AABB(mmin[0], mmax[0], mmin[1], mmax[1], mmin[2], mmax[2]));
+    return res;
 }
