@@ -77,32 +77,39 @@ public:
 
 /*definition for aabb*/
 class AABB : public surface{
-private:
-    float xmin;
-    float xmax;
-    float ymin;
-    float ymax;
-    float zmin;
-    float zmax;
+public:
+    float mmin[3];
+    float mmax[3];
     /* a surface it contains */
     std::shared_ptr <surface> obj;
-public:
-    AABB(float _xmin, float _xmax, float _ymin, float _ymax, float _zmin, float _zmax):xmin(_xmin), xmax(_xmax)
-    , ymin(_ymin), ymax(_ymax), zmin(_zmin), zmax(_zmax){
+    AABB() {
+        //init is a box without anything
+        for (int i = 0; i < 3; ++i)
+            mmin[i] = std::numeric_limits<float>::max();
+        for (int i = 0; i < 3; ++i)
+            mmax[i] = std::numeric_limits<float>::min();
+    }
+    AABB(float _xmin, float _xmax, float _ymin, float _ymax, float _zmin, float _zmax){
+        mmin[0] = _xmin;
+        mmin[1] = _ymin;
+        mmin[2] = _zmin;
+        mmax[0] = _xmax;
+        mmax[1] = _ymax;
+        mmax[2] = _zmax;
         obj = nullptr;
     }
     virtual vect get_n(const point & p) {
-        if (check_eps(p.x - xmin))
+        if (check_eps(p.x - mmin[0]))
             return vect(-1,0,0);
-        if (check_eps(p.x - xmax))
+        if (check_eps(p.x - mmax[0]))
             return vect(1,0,0);
-        if (check_eps(p.y - ymin))
+        if (check_eps(p.y - mmin[1]))
             return vect(0,-1,0);
-        if (check_eps(p.y - ymax))
+        if (check_eps(p.y - mmax[1]))
             return vect(0,1,0);
-        if (check_eps(p.z - zmin))
+        if (check_eps(p.z - mmin[2]))
             return vect(0,0,-1);
-        if (check_eps(p.z - zmax))
+        if (check_eps(p.z - mmax[2]))
             return vect(0,0,1);
         //maybe wrong into this position
         assert(false);
@@ -114,5 +121,11 @@ public:
     virtual bool intersect(ray & _r, float & t);
     void set_obj(std::shared_ptr <surface> _obj) {
         obj = _obj;
+    }
+    float get_volume() {
+        float res = 1;
+        for (int i = 0; i < 3; ++i)
+            res *= (mmax[i] - mmin[i]);
+        return res;
     }
 };

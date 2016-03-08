@@ -73,12 +73,12 @@ bool AABB::intersect(ray &_r, float &t){
     float tmax;
     /* stupid QAQ I need use array at first */
     if (_r.dir.x == 0) {
-        if (_r.origin.x > xmax || _r.origin.x < xmin)
+        if (_r.origin.x > mmax[0] || _r.origin.x < mmin[0])
             return false;
     }
     else {
-        tmin = (xmin - _r.origin.x) / _r.dir.x;
-        tmax = (xmax - _r.origin.x) / _r.dir.x;
+        tmin = (mmin[0] - _r.origin.x) / _r.dir.x;
+        tmax = (mmax[0] - _r.origin.x) / _r.dir.x;
         if (tmin > tmax)
             swap(tmin, tmax);
         if (tmin > t_l)
@@ -90,12 +90,12 @@ bool AABB::intersect(ray &_r, float &t){
         return false;
     
     if (_r.dir.y == 0) {
-        if (_r.origin.y > ymax || _r.origin.y < ymin)
+        if (_r.origin.y > mmax[1] || _r.origin.y < mmin[1])
             return false;
     }
     else {
-        tmin = (ymin - _r.origin.y) / _r.dir.y;
-        tmax = (ymax - _r.origin.y) / _r.dir.y;
+        tmin = (mmin[0] - _r.origin.y) / _r.dir.y;
+        tmax = (mmax[1] - _r.origin.y) / _r.dir.y;
         if (tmin > tmax)
             swap(tmin, tmax);
         if (tmin > t_l)
@@ -107,12 +107,12 @@ bool AABB::intersect(ray &_r, float &t){
         return false;
     
     if (_r.dir.z == 0) {
-        if (_r.origin.z > zmax || _r.origin.z < zmin)
+        if (_r.origin.z > mmax[2] || _r.origin.z < mmin[1])
                 return false;
         }
         else {
-            tmin = (zmin - _r.origin.z) / _r.dir.z;
-            tmax = (zmax - _r.origin.z) / _r.dir.z;
+            tmin = (mmin[1] - _r.origin.z) / _r.dir.z;
+            tmax = (mmax[2] - _r.origin.z) / _r.dir.z;
             if (tmin > tmax)
                 swap(tmin, tmax);
             if (tmin > t_l)
