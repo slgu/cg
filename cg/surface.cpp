@@ -108,25 +108,24 @@ bool AABB::intersect(ray &_r, float &t){
         return false;
     
     if (_r.dir.z == 0) {
-        if (_r.origin.z > mmax[2] || _r.origin.z < mmin[1])
+        if (_r.origin.z > mmax[2] || _r.origin.z < mmin[2])
                 return false;
-        }
-        else {
-            tmin = (mmin[2] - _r.origin.z) / _r.dir.z;
-            tmax = (mmax[2] - _r.origin.z) / _r.dir.z;
-            if (tmin > tmax)
-                swap(tmin, tmax);
-            if (tmin > t_l)
-                t_l = tmin;
-            if (tmax < t_r)
-                t_r = tmax;
-        }
+    }
+    else {
+        tmin = (mmin[2] - _r.origin.z) / _r.dir.z;
+        tmax = (mmax[2] - _r.origin.z) / _r.dir.z;
+        if (tmin > tmax)
+            swap(tmin, tmax);
+        if (tmin > t_l)
+            t_l = tmin;
+        if (tmax < t_r)
+            t_r = tmax;
+    }
     if (t_l > t_r)
         return false;
     if (t_r < 0)
         return false;
     t = t_l;
-    printf("%.2f %.2f\n", t_l, t_r);
     return true;
 }
 

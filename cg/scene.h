@@ -9,8 +9,6 @@
 class Scene {
     //camera
 public:
-    static const int SHADOW_RAY = 1;
-    static const int NORMAL_RAY = 0;
     const float SHADOW_COE;
     std::shared_ptr <bvh_node> bvh_tree;
     int cmd;
@@ -49,7 +47,10 @@ public:
         cmd = __cmd;
     }
     void pre() {
-        if (cmd == 1) {
+        if (cmd == 0) {
+        
+        }
+        else {
             //create boxes for each surface
             int l = int(objs.size());
             for (int i = 0; i < l; ++i) {
@@ -57,12 +58,16 @@ public:
                 box->set_obj(objs[i]);
                 boxes.push_back(box);
             }
-        }
-        else if (cmd == 2) {
-            
-        }
-        else if (cmd == 3) {
-            
+            if (cmd == 1) {
+                
+            }
+            else if (cmd == 2) {
+                bvh_tree = bvh_node::build(boxes);
+                //bvh_node::debug(bvh_tree);
+            }
+            else if (cmd == 3) {
+                
+            }
         }
     }
     Rgba recur_ray_cal(ray & ry, int depth);

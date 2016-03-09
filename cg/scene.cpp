@@ -95,8 +95,15 @@ bool Scene::trace_bvh(ray & ry, float & t0, shared_ptr<surface> & nearest_surfac
 }
 
 bool Scene::trace_bvh_aabb(ray & ry, float & t0, shared_ptr<surface> & nearest_surface, int type) {
-    //TODO
-    return false;
+    std::shared_ptr <AABB> res = nullptr;
+    if (type != SHADOW_RAY) {
+        t0 = -1; //no found
+    }
+    bvh_node::intersect_box(bvh_tree, ry, t0, res, type);
+    bool flg = false;
+    if (t0 > 0) flg = true;
+    nearest_surface = res;
+    return flg;
 }
 
 //just trace the objs to see if intersection
@@ -106,7 +113,7 @@ bool Scene::trace(ray & ry, float & t0, shared_ptr<surface> & nearest_surface, i
     else if (cmd == 1)
         return trace_aabb(ry, t0, nearest_surface, type);
     else if (cmd == 2)
-        return false;
+        return trace_bvh_aabb(ry, t0, nearest_surface, type);
     else if (cmd == 3)
         return false;
     else
@@ -172,7 +179,7 @@ Rgba Scene::recur_ray_cal(ray & ry, int depth) {
     ray reflect_ray(ry.get_t(t0 * (1- SHADOW_COE)), reflect_ray_dir);
     Rgba res = recur_ray_cal(reflect_ray, depth - 1);
     float coe = inner_product(reflect_ray_dir, n);
-    coe = 0.8;//N * r needed or not ?
+    coe = 1;//N * r needed or not ?
     res.r = r + m.ir * coe * res.r;
     res.g = g + m.ig * coe * res.g;
     res.b = b + m.ib * coe * res.b;

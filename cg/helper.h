@@ -37,3 +37,5 @@ template <typename T> void swap(T & a, T & b) {
     a = b;
     b = c;
 }
+#define SHADOW_RAY 1
+#define NORMAL_RAY 0

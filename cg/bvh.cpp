@@ -7,6 +7,7 @@
 //
 
 #include "bvh.hpp"
+#include "helper.h"
 bool cmpx(const std::shared_ptr<AABB> & a1, const std::shared_ptr<AABB> & a2) {
     return a1->mmin[0] < a2->mmin[0];
 }
@@ -61,7 +62,6 @@ std::shared_ptr <bvh_node> bvh_node::build(std::vector <std::shared_ptr<AABB>> &
         }
     }
     bvhsort(boxes, best_idx);
-    
     //recursive call left and right
     std::vector <std::shared_ptr<AABB>> left_boxes;
     std::vector <std::shared_ptr<AABB>> right_boxes;
@@ -70,4 +70,54 @@ std::shared_ptr <bvh_node> bvh_node::build(std::vector <std::shared_ptr<AABB>> &
     res_node->left = build(left_boxes);
     res_node->right = build(right_boxes);
     return res_node;
+}
+
+void bvh_node::intersect_obj(std::shared_ptr<bvh_node> node, ray & ry, float & t0, std::shared_ptr<AABB> & nearest_aabb, int type) {
+    float t;
+    //return if no intersect with aabb
+    if (!node->ab_node->intersect(ry, t))
+        return;
+    //if this intersect has larger t return
+    if (t0 != -1 && t0 < t)
+        return;
+    //children pointer
+    if (node->left == nullptr && node->right == nullptr) {
+        if (node->ab_node->obj->intersect(ry, t)) {
+            if (t0 == -1 || t0 > t) {
+                printf("%.2f\n", t0);
+                t0 = t;
+                nearest_aabb = node->ab_node;
+            }
+        }
+    }
+    if (node->left != nullptr)
+        intersect_obj(node->left, ry, t0, nearest_aabb, type);
+    if (node->right != nullptr)
+        intersect_obj(node->right, ry, t0, nearest_aabb, type);
+}
+
+void bvh_node::intersect_box(std::shared_ptr<bvh_node> node, ray & ry, float & t0, std::shared_ptr<AABB> & nearest_aabb, int type) {
+    float t;
+    
+    //return if no intersect with aabb
+    if (!node->ab_node->intersect(ry, t))
+        return;
+    //if this intersect has larger t return
+    /*
+    if (t0 != -1 && t0 < t)
+        return;
+     */
+    //children pointer
+    if (node->left == nullptr && node->right == nullptr) {
+        if (node->ab_node->intersect(ry, t)) {
+            if (t0 == -1 || t0 > t) {
+                t0 = t;
+                nearest_aabb = node->ab_node;
+            }
+        }
+    }
+    if (node->left != nullptr)
+        intersect_box(node->left, ry, t0, nearest_aabb, type);
+    if (node->right != nullptr)
+        intersect_box(node->right, ry, t0, nearest_aabb, type);
 }
