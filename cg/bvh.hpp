@@ -31,8 +31,8 @@ public:
     }
     static void bvhsort(std::vector <std::shared_ptr<AABB>> &boxes, int i);
     static std::shared_ptr <bvh_node> build(std::vector <std::shared_ptr<AABB>> &boxes);
-    static void intersect_obj(std::shared_ptr<bvh_node> node, ray & ry, float & t0, std::shared_ptr<AABB> & nearest_aabb, int type);
-    static void intersect_box(std::shared_ptr<bvh_node> node, ray & ry, float & t0, std::shared_ptr<AABB> & nearest_aabb, int type);
+    static bool intersect_obj(std::shared_ptr<bvh_node> node, ray & ry, float & t0, std::shared_ptr<surface> & nearest_sur, int type);
+    static bool intersect_box(std::shared_ptr<bvh_node> node, ray & ry, float & t0, std::shared_ptr<AABB> & nearest_aabb, int type);
     static void debug(std::shared_ptr<bvh_node> node) {
         if (node != nullptr) {
             std::cout << "this box" << std::endl;

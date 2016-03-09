@@ -20,7 +20,7 @@ int main (int argc, char *argv[]) {
     std::shared_ptr <Scene> scene(new Scene());
     Parser parser;
     parser.parse_scene_file("/Users/slgu1/Desktop/test", scene);
-    scene->set_cmd(1);
+    scene->set_cmd(0);
     scene->pre();
     scene->get_intersection("/Users/slgu1/Desktop/test.exr");
     return 0;

@@ -61,12 +61,8 @@ public:
             if (cmd == 1) {
                 
             }
-            else if (cmd == 2) {
+            else {
                 bvh_tree = bvh_node::build(boxes);
-                //bvh_node::debug(bvh_tree);
-            }
-            else if (cmd == 3) {
-                
             }
         }
     }

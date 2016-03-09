@@ -72,52 +72,62 @@ std::shared_ptr <bvh_node> bvh_node::build(std::vector <std::shared_ptr<AABB>> &
     return res_node;
 }
 
-void bvh_node::intersect_obj(std::shared_ptr<bvh_node> node, ray & ry, float & t0, std::shared_ptr<AABB> & nearest_aabb, int type) {
+bool bvh_node::intersect_obj(std::shared_ptr<bvh_node> node, ray & ry, float & t0, std::shared_ptr<surface> & nearest_sur, int type) {
     float t;
+    bool interflg = false;
     //return if no intersect with aabb
     if (!node->ab_node->intersect(ry, t))
-        return;
+        return false;
     //if this intersect has larger t return
     if (t0 != -1 && t0 < t)
-        return;
+        return false;
     //children pointer
     if (node->left == nullptr && node->right == nullptr) {
         if (node->ab_node->obj->intersect(ry, t)) {
             if (t0 == -1 || t0 > t) {
-                printf("%.2f\n", t0);
                 t0 = t;
-                nearest_aabb = node->ab_node;
+                nearest_sur = node->ab_node->obj;
+                interflg = true;
             }
         }
     }
-    if (node->left != nullptr)
-        intersect_obj(node->left, ry, t0, nearest_aabb, type);
-    if (node->right != nullptr)
-        intersect_obj(node->right, ry, t0, nearest_aabb, type);
+    if (node->left != nullptr) {
+        if(intersect_obj(node->left, ry, t0, nearest_sur, type))
+            interflg = true;
+    }
+    if (node->right != nullptr) {
+        if(intersect_obj(node->right, ry, t0, nearest_sur, type))
+            interflg = true;
+    }
+    return interflg;
 }
 
-void bvh_node::intersect_box(std::shared_ptr<bvh_node> node, ray & ry, float & t0, std::shared_ptr<AABB> & nearest_aabb, int type) {
+bool bvh_node::intersect_box(std::shared_ptr<bvh_node> node, ray & ry, float & t0, std::shared_ptr<AABB> & nearest_aabb, int type) {
     float t;
-    
+    bool interflg = false;
     //return if no intersect with aabb
     if (!node->ab_node->intersect(ry, t))
-        return;
+        return false;
     //if this intersect has larger t return
-    /*
     if (t0 != -1 && t0 < t)
-        return;
-     */
+        return false;
     //children pointer
     if (node->left == nullptr && node->right == nullptr) {
         if (node->ab_node->intersect(ry, t)) {
             if (t0 == -1 || t0 > t) {
                 t0 = t;
                 nearest_aabb = node->ab_node;
+                interflg = true;
             }
         }
     }
-    if (node->left != nullptr)
-        intersect_box(node->left, ry, t0, nearest_aabb, type);
-    if (node->right != nullptr)
-        intersect_box(node->right, ry, t0, nearest_aabb, type);
+    if (node->left != nullptr) {
+        if (intersect_box(node->left, ry, t0, nearest_aabb, type))
+            interflg = true;
+    }
+    if (node->right != nullptr) {
+        if (intersect_box(node->right, ry, t0, nearest_aabb, type))
+            interflg = true;
+    }
+    return interflg;
 }

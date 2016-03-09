@@ -90,8 +90,10 @@ bool Scene::trace_aabb(ray & ry, float & t0, shared_ptr<surface> & nearest_surfa
 }
 
 bool Scene::trace_bvh(ray & ry, float & t0, shared_ptr<surface> & nearest_surface, int type) {
-    //TODO
-    return false;
+    if (type != SHADOW_RAY) {
+        t0 = -1; //no found
+    }
+    return bvh_node::intersect_obj(bvh_tree, ry, t0, nearest_surface, type);
 }
 
 bool Scene::trace_bvh_aabb(ray & ry, float & t0, shared_ptr<surface> & nearest_surface, int type) {
@@ -99,9 +101,7 @@ bool Scene::trace_bvh_aabb(ray & ry, float & t0, shared_ptr<surface> & nearest_s
     if (type != SHADOW_RAY) {
         t0 = -1; //no found
     }
-    bvh_node::intersect_box(bvh_tree, ry, t0, res, type);
-    bool flg = false;
-    if (t0 > 0) flg = true;
+    bool flg = bvh_node::intersect_box(bvh_tree, ry, t0, res, type);
     nearest_surface = res;
     return flg;
 }
@@ -115,7 +115,7 @@ bool Scene::trace(ray & ry, float & t0, shared_ptr<surface> & nearest_surface, i
     else if (cmd == 2)
         return trace_bvh_aabb(ry, t0, nearest_surface, type);
     else if (cmd == 3)
-        return false;
+        return trace_bvh(ry, t0, nearest_surface, type);
     else
         return false;
 }
