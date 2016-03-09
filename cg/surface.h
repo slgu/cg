@@ -151,5 +151,14 @@ public:
         std::shared_ptr <AABB> res(this);
         return res;
     }
+    void debug_aabb() {
+        puts("aabb");
+        for (int i = 0; i < 3; ++i)
+            printf("%.2f ", mmin[i]);
+        puts("");
+        for (int i = 0; i < 3; ++i)
+            printf("%.2f ", mmax[i]);
+        puts("");
+    }
 };
 

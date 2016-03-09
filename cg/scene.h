@@ -64,6 +64,11 @@ public:
             else {
                 bvh_tree = bvh_node::build(boxes);
             }
+            //debug for boxes
+            /*
+            for (auto itr = boxes.begin(); itr != boxes.end(); ++itr)
+                (*itr)->debug_aabb();
+             */
         }
     }
     Rgba recur_ray_cal(ray & ry, int depth);

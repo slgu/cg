@@ -135,20 +135,21 @@ std::shared_ptr <AABB> sphere::get_aabb() {
 }
 
 std::shared_ptr <AABB> plane::get_aabb() {
-    float float_min = std::numeric_limits<float>::min();
     float float_max = std::numeric_limits<float>::max();
+    float float_min = -float_max;
     std::shared_ptr <AABB> res(new AABB(float_min, float_max, float_min, float_max, float_min, float_max));
     return res;
 }
 
 std::shared_ptr <AABB> tri::get_aabb() {
-    float float_min = std::numeric_limits<float>::min();
     float float_max = std::numeric_limits<float>::max();
+    float float_min = -float_max;
     float mmin[3], mmax[3];
     for (int i = 0; i < 3; ++i) {
         mmin[i] = float_max;
         mmax[i] = float_min;
     }
+    
     for (int i = 0; i < 3; ++i) {
         //x
         if(p[i].x < mmin[0])
