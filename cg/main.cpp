@@ -16,7 +16,13 @@ int main (int argc, char *argv[]) {
         return -1;
     }
     int cmd = atoi(argv[3]);
-    */
+    std::shared_ptr <Scene> scene(new Scene());
+    Parser parser;
+    parser.parse_scene_file(argv[1], scene);
+    scene->set_cmd(cmd);
+    scene->pre();
+    scene->get_intersection(argv[2]);
+     */
     std::shared_ptr <Scene> scene(new Scene());
     Parser parser;
     parser.parse_scene_file("/Users/slgu1/Desktop/test", scene);

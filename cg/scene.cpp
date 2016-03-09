@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 #include "scene.h"
-//#define INTER_DEBUG
+#define INTER_DEBUG
 void Scene::get_intersection(std::string filename) {
     Array2D <Rgba> pixels;
     pixels.resizeErase(c->ny, c->nx);
