@@ -116,6 +116,12 @@ public:
         obj = nullptr;
     }
     virtual vect get_n(const point & p) {
+        if (check_eps(p.x - mmin[0]) && check_eps(p.x - mmax[0]))
+            assert(false);
+        if (check_eps(p.y - mmin[1]) && check_eps(p.y - mmax[1]))
+            assert(false);
+        if (check_eps(p.z - mmin[2]) && check_eps(p.z - mmax[2]))
+            assert(false);
         if (check_eps(p.x - mmin[0]))
             return vect(-1,0,0);
         if (check_eps(p.x - mmax[0]))
@@ -159,6 +165,12 @@ public:
         for (int i = 0; i < 3; ++i)
             printf("%.2f ", mmax[i]);
         puts("");
+    }
+    void enlarge() {
+        for (int i = 0; i < 3; ++i)
+            mmin[i] -= 1e-3;
+        for (int i = 0; i < 3; ++i)
+            mmax[i] += 1e-3;
     }
 };
 

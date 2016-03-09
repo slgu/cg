@@ -26,10 +26,12 @@ inline float inner_product(const point & v1, const vect & v2) {
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
 
-inline bool check_eps(const float & a) {
-    if (abs(a) < 1e-8)
+inline bool check_eps(float a) {
+    if (a < 0) a = -a;
+    if (a < 1e-3)
         return true;
-    return false;
+    else
+        return false;
 }
 
 template <typename T> void swap(T & a, T & b) {

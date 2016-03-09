@@ -68,8 +68,8 @@ bool tri::intersect(ray & _r, float & t) {
 }
 
 bool AABB::intersect(ray &_r, float &t){
-    float t_l = std::numeric_limits<float>::min();
     float t_r = std::numeric_limits<float>::max();
+    float t_l = -t_r;
     float tmin;
     float tmax;
     /* stupid QAQ I need use array at first */
@@ -131,6 +131,7 @@ bool AABB::intersect(ray &_r, float &t){
 
 std::shared_ptr <AABB> sphere::get_aabb() {
     std::shared_ptr <AABB> res(new AABB(o.x - r, o.x + r, o.y - r, o.y + r, o.z - r, o.z + r));
+    res->enlarge();
     return res;
 }
 
@@ -138,6 +139,7 @@ std::shared_ptr <AABB> plane::get_aabb() {
     float float_max = std::numeric_limits<float>::max();
     float float_min = -float_max;
     std::shared_ptr <AABB> res(new AABB(float_min, float_max, float_min, float_max, float_min, float_max));
+    res->enlarge();
     return res;
 }
 
@@ -168,5 +170,6 @@ std::shared_ptr <AABB> tri::get_aabb() {
             mmax[2] = p[i].z;
     }
     std::shared_ptr<AABB>res(new AABB(mmin[0], mmax[0], mmin[1], mmax[1], mmin[2], mmax[2]));
+    res->enlarge();
     return res;
 }
