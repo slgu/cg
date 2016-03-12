@@ -17,6 +17,8 @@ public:
     std::vector < shared_ptr <light> > lights;
     //multiple objs
     std::vector < shared_ptr <surface> > objs;
+    //surfaces
+    std::vector < shared_ptr <plane> > planes;
     std::vector < shared_ptr <AABB> > boxes;
     //init
     Scene():SHADOW_COE(0.001){
@@ -42,6 +44,11 @@ public:
     void add_light(light * l) {
         shared_ptr <light> tmp(l);
         lights.push_back(tmp);
+    }
+    //add plane
+    void add_plane(plane * p) {
+        shared_ptr <plane> tmp(p);
+        planes.push_back(tmp);
     }
     void set_cmd(int __cmd) {
         cmd = __cmd;
@@ -69,6 +76,32 @@ public:
             for (auto itr = boxes.begin(); itr != boxes.end(); ++itr)
                 (*itr)->debug_aabb();
              */
+        }
+    }
+    bool trace_plane(ray & ry, float & t0, shared_ptr<surface> & nearest_surface, int type) {
+        bool flg = false;
+        for (auto itr = planes.begin(); itr != planes.end(); ++itr) {
+            float tmp;
+            if ((*itr)->intersect(ry, tmp)) {
+                //if shadow no need nearest search
+                if (type == SHADOW_RAY) {
+                    if (t0 > tmp)
+                        return true;
+                }
+                else {
+                    flg = true;
+                    if (t0 == -1 || t0 > tmp) {
+                        t0 = tmp;
+                        nearest_surface = *itr;
+                    }
+                }
+            }
+        }
+        if (!flg) {
+            return false;
+        }
+        else {
+            return true;
         }
     }
     Rgba recur_ray_cal(ray & ry, int depth);

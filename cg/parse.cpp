@@ -150,7 +150,7 @@ void Parser::parse_scene_file(char *filnam, shared_ptr <Scene> & scene)
                 d = getTokenAsFloat (line, 4);
                 plane_ptr = new plane(x, y, z, d);
                 plane_ptr->set_material(material_ptr);
-                scene->add_obj(plane_ptr);
+                scene->add_plane(plane_ptr);
                 break;
                 //
                 // camera:

@@ -5,6 +5,7 @@
 #include <memory>
 #include <limits>
 #include <cassert>
+#include "helper.h"
 /*definition for aabb*/
 class AABB;
 
@@ -135,7 +136,7 @@ public:
         if (check_eps(p.z - mmax[2]))
             return vect(0,0,1);
         //maybe wrong into this position
-        assert(false);
+        //assert(false);
         return vect(0,0,0);
     }
     std::string debug() {
@@ -167,10 +168,10 @@ public:
         puts("");
     }
     void enlarge() {
-        for (int i = 0; i < 3; ++i)
-            mmin[i] -= 1e-3;
-        for (int i = 0; i < 3; ++i)
+        for (int i = 0; i < 3; ++i) {
             mmax[i] += 1e-3;
+            mmin[i] -= 1e-3;
+        }
     }
 };
 

@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 #include "scene.h"
-//#define INTER_DEBUG
+#define INTER_DEBUG
 void Scene::get_intersection(std::string filename) {
     Array2D <Rgba> pixels;
     pixels.resizeErase(c->ny, c->nx);
@@ -31,9 +31,6 @@ void Scene::get_intersection(std::string filename) {
 
 bool Scene::trace_normal(ray & ry, float & t0, shared_ptr<surface> & nearest_surface, int type) {
     bool flg = false;
-    if (type != SHADOW_RAY) {
-        t0 = -1;
-    }
     for (auto itr = objs.begin(); itr != objs.end(); ++itr) {
         float tmp;
         if ((*itr)->intersect(ry, tmp)) {
@@ -61,9 +58,6 @@ bool Scene::trace_normal(ray & ry, float & t0, shared_ptr<surface> & nearest_sur
 
 bool Scene::trace_aabb(ray & ry, float & t0, shared_ptr<surface> & nearest_surface, int type) {
     bool flg = false;
-    if (type != SHADOW_RAY) {
-        t0 = -1;
-    }
     for (auto itr = boxes.begin(); itr != boxes.end(); ++itr) {
         float tmp;
         if ((*itr)->intersect(ry, tmp)) {
@@ -90,17 +84,11 @@ bool Scene::trace_aabb(ray & ry, float & t0, shared_ptr<surface> & nearest_surfa
 }
 
 bool Scene::trace_bvh(ray & ry, float & t0, shared_ptr<surface> & nearest_surface, int type) {
-    if (type != SHADOW_RAY) {
-        t0 = -1; //no found
-    }
     return bvh_node::intersect_obj(bvh_tree, ry, t0, nearest_surface, type);
 }
 
 bool Scene::trace_bvh_aabb(ray & ry, float & t0, shared_ptr<surface> & nearest_surface, int type) {
     std::shared_ptr <AABB> res = nullptr;
-    if (type != SHADOW_RAY) {
-        t0 = -1; //no found
-    }
     bool flg = bvh_node::intersect_box(bvh_tree, ry, t0, res, type);
     nearest_surface = res;
     return flg;
@@ -108,14 +96,30 @@ bool Scene::trace_bvh_aabb(ray & ry, float & t0, shared_ptr<surface> & nearest_s
 
 //just trace the objs to see if intersection
 bool Scene::trace(ray & ry, float & t0, shared_ptr<surface> & nearest_surface, int type) {
-    if (cmd == 0)
-        return trace_normal(ry, t0, nearest_surface, type);
-    else if (cmd == 1)
+    if (type != SHADOW_RAY)
+        t0 = - 1;
+    bool flg1 = false;
+    bool flg2 = false;
+    if (cmd == 0) {
+        flg1 = trace_normal(ry, t0, nearest_surface, type);
+        if (type == SHADOW_RAY && flg1)
+            return true;
+        flg2 = trace_plane(ry, t0, nearest_surface, type);
+        return flg1 || flg2;
+    }
+    else if (cmd == 1) {
         return trace_aabb(ry, t0, nearest_surface, type);
-    else if (cmd == 2)
+    }
+    else if (cmd == 2) {
         return trace_bvh_aabb(ry, t0, nearest_surface, type);
-    else if (cmd == 3)
-        return trace_bvh(ry, t0, nearest_surface, type);
+    }
+    else if (cmd == 3) {
+        flg1 = trace_bvh(ry, t0, nearest_surface, type);
+        if (type == SHADOW_RAY && flg1)
+            return true;
+        flg2 = trace_plane(ry, t0, nearest_surface, type);
+        return flg1 || flg2;
+    }
     else
         return false;
 }
