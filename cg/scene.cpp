@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 #include "scene.h"
-#define INTER_DEBUG
+//#define INTER_DEBUG
 void Scene::get_intersection(std::string filename) {
     Array2D <Rgba> pixels;
     pixels.resizeErase(c->ny, c->nx);
@@ -21,7 +21,7 @@ void Scene::get_intersection(std::string filename) {
             ray ry = c->generate_ray(i, j);
             Rgba & rgb = pixels[c-> ny - 1 - j][i];
             rgb.r = rgb.b = rgb.g = 0;
-            Rgba res = recur_ray_cal(ry, 5);
+            Rgba res = recur_ray_cal(ry, 10);
             rgb.r = res.r;
             rgb.g = res.g;
             rgb.b = res.b;
@@ -152,7 +152,6 @@ Rgba Scene::recur_ray_cal(ray & ry, int depth) {
         res.r = res.g = res.b = 0;
         return res;
     }
-    
     //calculate result
     float r = 0;
     float g = 0;
@@ -190,10 +189,8 @@ Rgba Scene::recur_ray_cal(ray & ry, int depth) {
     norm(reflect_ray_dir);
     ray reflect_ray(ry.get_t(t0 * (1- SHADOW_COE)), reflect_ray_dir);
     Rgba res = recur_ray_cal(reflect_ray, depth - 1);
-    float coe = inner_product(reflect_ray_dir, n);
-    coe = 1;//N * r needed or not ?
-    res.r = r + m.ir * coe * res.r;
-    res.g = g + m.ig * coe * res.g;
-    res.b = b + m.ib * coe * res.b;
+    res.r = r + m.ir * res.r;
+    res.g = g + m.ig * res.g;
+    res.b = b + m.ib * res.b;
     return res;
 }

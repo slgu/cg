@@ -105,7 +105,7 @@ public:
         for (int i = 0; i < 3; ++i)
             mmin[i] = std::numeric_limits<float>::max();
         for (int i = 0; i < 3; ++i)
-            mmax[i] = std::numeric_limits<float>::min();
+            mmax[i] = -mmin[i];
     }
     AABB(float _xmin, float _xmax, float _ymin, float _ymax, float _zmin, float _zmax){
         mmin[0] = _xmin;

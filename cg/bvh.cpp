@@ -8,6 +8,7 @@
 
 #include "bvh.hpp"
 #include "helper.h"
+#include <cstdlib>
 bool cmpx(const std::shared_ptr<AABB> & a1, const std::shared_ptr<AABB> & a2) {
     return a1->mmin[0] < a2->mmin[0];
 }
@@ -47,8 +48,9 @@ std::shared_ptr <bvh_node> bvh_node::build(std::vector <std::shared_ptr<AABB>> &
     res_node->ab_node = ab_node;
     //select axis
     int half = l / 2;
-    float best_volume = -1;
-    int best_idx = -1;
+    //float best_volume = -1;
+    int best_idx = rand() % 3;
+    /*
     for (int i = 0; i < 3; ++i) {
         bvhsort(boxes, i);
         float volume = 0;
@@ -61,6 +63,7 @@ std::shared_ptr <bvh_node> bvh_node::build(std::vector <std::shared_ptr<AABB>> &
             best_idx = i;
         }
     }
+     */
     bvhsort(boxes, best_idx);
     //recursive call left and right
     std::vector <std::shared_ptr<AABB>> left_boxes;
@@ -88,16 +91,24 @@ bool bvh_node::intersect_obj(std::shared_ptr<bvh_node> node, ray & ry, float & t
                 t0 = t;
                 nearest_sur = node->ab_node->obj;
                 interflg = true;
+                if (type == SHADOW_RAY)
+                    return true;
             }
         }
     }
     if (node->left != nullptr) {
-        if(intersect_obj(node->left, ry, t0, nearest_sur, type))
+        if(intersect_obj(node->left, ry, t0, nearest_sur, type)) {
             interflg = true;
+            if (type == SHADOW_RAY)
+                return true;
+        }
     }
     if (node->right != nullptr) {
-        if(intersect_obj(node->right, ry, t0, nearest_sur, type))
+        if(intersect_obj(node->right, ry, t0, nearest_sur, type)) {
             interflg = true;
+            if (type == SHADOW_RAY)
+                return true;
+        }
     }
     return interflg;
 }

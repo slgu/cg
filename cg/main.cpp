@@ -9,7 +9,7 @@
 #include <iostream>
 #include "parse.h"
 #include "scene.h"
-#define MAIN_DEBUG
+//#define MAIN_DEBUG
 int main (int argc, char *argv[]) {
 #ifndef MAIN_DEBUG
     if (argc != 4) {
@@ -27,7 +27,7 @@ int main (int argc, char *argv[]) {
     std::shared_ptr <Scene> scene(new Scene());
     Parser parser;
     parser.parse_scene_file("/Users/slgu1/Desktop/test", scene);
-    scene->set_cmd(2);
+    scene->set_cmd(3);
     scene->pre();
     scene->get_intersection("/Users/slgu1/Desktop/test.exr");
 #endif
