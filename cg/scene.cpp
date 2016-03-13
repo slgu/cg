@@ -108,10 +108,18 @@ bool Scene::trace(ray & ry, float & t0, shared_ptr<surface> & nearest_surface, i
         return flg1 || flg2;
     }
     else if (cmd == 1) {
-        return trace_aabb(ry, t0, nearest_surface, type);
+        flg1 = trace_aabb(ry, t0, nearest_surface, type);
+        if (type == SHADOW_RAY && flg1)
+            return true;
+        flg2 = trace_plane(ry, t0, nearest_surface, type);
+        return flg1 || flg2;
     }
     else if (cmd == 2) {
-        return trace_bvh_aabb(ry, t0, nearest_surface, type);
+        flg1 = trace_bvh_aabb(ry, t0, nearest_surface, type);
+        if (type == SHADOW_RAY && flg1)
+            return true;
+        flg2 = trace_plane(ry, t0, nearest_surface, type);
+        return flg1 || flg2;
     }
     else if (cmd == 3) {
         flg1 = trace_bvh(ry, t0, nearest_surface, type);
