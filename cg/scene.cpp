@@ -10,17 +10,31 @@
 #include "scene.h"
 #include <random>
 //#define INTER_DEBUG
-void Scene::get_intersection(std::string filename) {
-    Array2D <Rgba> pixels;
-    pixels.resizeErase(c->ny, c->nx);
+//#define USE_TBB
+#ifdef USE_TBB
+#include "tbb/parallel_for.h"
+#endif
+void Scene::render() {
+    pixels.clear();
+    for (int i = 0; i < c->ny; ++i) {
+        pixels.push_back(vector<Rgba>());
+    }
+    for (int i = 0; i < c->ny; ++i)
+        for (int j = 0; j < c->nx; ++j)
+            pixels[i].push_back(Rgba());
     //sample pri_ray_num ^ 2 ray
+#ifdef USE_TBB
+    tbb::parallel_for(0, c->nx, 1, [=] (int i) {
+        tbb::parallel_for(0, c->ny, 1, [=] (int j) {
+#else
     for (int i = 0; i < c->nx; ++i)
         for (int j = 0; j < c->ny; ++j) {
+#endif
 #ifdef INTER_DEBUG
             std::cout << "now:" << 100.0 * (i * c->ny + j) / c->nx / c->ny << std::endl;
 #endif
             //generate ray
-            Rgba & rgb = pixels[c-> ny - 1 - j][i];
+            Rgba rgb;
             rgb.r = rgb.b = rgb.g = 0;
             for (int k = 0; k < pri_ray_num; ++k)
                 for(int o = 0; o < pri_ray_num; ++o) {
@@ -35,8 +49,13 @@ void Scene::get_intersection(std::string filename) {
             rgb.r /= (pri_ray_num * pri_ray_num);
             rgb.g /= (pri_ray_num * pri_ray_num);
             rgb.b /= (pri_ray_num * pri_ray_num);
+            pixels[c-> ny - 1 - j][i].r = rgb.r;
+            pixels[c-> ny - 1 - j][i].g = rgb.g;
+            pixels[c-> ny - 1 - j][i].b = rgb.b;
         }
-    write_exr_file(filename, &pixels[0][0], c->nx, c->ny);
+#ifdef USE_TBB
+        );});
+#endif
 }
 
 bool Scene::trace_normal(ray & ry, float & t0, shared_ptr<surface> & nearest_surface, int type) {
@@ -223,6 +242,8 @@ Rgba Scene::recur_ray_cal(ray & ry, int depth) {
     //if [0,0,0] no need for recur ray trace
     if(m.ir == 0 && m.ig == 0 && m.ib == 0)
         return Rgba(r, g, b);
+    
+    //add glossy reflection TODO needed
     //use reflective ray to recur ray tray
     vect reflect_ray_dir = ry.dir - 2 * inner_product(ry.dir, n) * n;
     norm(reflect_ray_dir);

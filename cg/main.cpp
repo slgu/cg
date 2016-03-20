@@ -9,7 +9,7 @@
 #include <iostream>
 #include "parse.h"
 #include "scene.h"
-#define MAIN_DEBUG
+//#define MAIN_DEBUG
 int main (int argc, char *argv[]) {
 #ifndef MAIN_DEBUG
     if (argc != 4) {
@@ -21,17 +21,21 @@ int main (int argc, char *argv[]) {
     Parser parser;
     parser.parse_scene_file(argv[1], scene);
     scene->set_cmd(cmd);
+    scene->set_pri_ray_num(3);
+    scene->set_shadow_ray_num(3);
     scene->pre();
-    scene->get_intersection(argv[2]);
+    scene->render();
+    scene->write_to_file(argv[2]);
 #else
     std::shared_ptr <Scene> scene(new Scene());
     Parser parser;
-    parser.parse_scene_file("/Users/slgu1/Desktop/test", scene);
+    parser.parse_scene_file("/Users/slgu1/Dropbox/graduate_courses@CU/cg/cg/test/test3", scene);
     scene->set_cmd(3);
     scene->set_pri_ray_num(3);
-    scene->set_shadow_ray_num(5);
+    scene->set_shadow_ray_num(3);
     scene->pre();
-    scene->get_intersection("/Users/slgu1/Desktop/test.exr");
+    scene->render();
+    scene->write_to_file("/Users/slgu1/Dropbox/graduate_courses@CU/cg/cg/test/test3.exr");
 #endif
     return 0;
 }

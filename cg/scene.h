@@ -6,6 +6,7 @@
 #include "camera.h"
 #include "light.hpp"
 #include "bvh.hpp"
+#include <vector>
 class Scene {
     //camera
 public:
@@ -20,6 +21,7 @@ public:
     //surfaces
     std::vector < shared_ptr <plane> > planes;
     std::vector < shared_ptr <AABB> > boxes;
+    std::vector <std::vector <Rgba>> pixels;
     //init
     int pri_ray_num;
     int shadow_ray_num;
@@ -27,7 +29,18 @@ public:
         bvh_tree = nullptr;
     }
     //get intersection and save the result
-    void get_intersection(std::string filename);
+    void render();
+    void write_to_file(std::string filename) {
+        Array2D <Rgba> file_pixels;
+        file_pixels.resizeErase(c->ny, c->nx);
+        for (int i = 0; i < c->ny; ++i)
+            for (int j = 0; j < c->nx; ++j) {
+                file_pixels[i][j].r = pixels[i][j].r;
+                file_pixels[i][j].g = pixels[i][j].g;
+                file_pixels[i][j].b = pixels[i][j].b;
+            }
+        write_exr_file(filename, &file_pixels[0][0], c->nx, c->ny);
+    }
     bool trace(ray & ry, float & t0, shared_ptr<surface> & nearest_surface, int type);
     bool trace_normal(ray & ry, float & t0, shared_ptr<surface> & nearest_surface, int type);
     bool trace_aabb(ray & ry, float & t0, shared_ptr<surface> & nearest_surface, int type);
