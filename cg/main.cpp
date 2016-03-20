@@ -9,7 +9,7 @@
 #include <iostream>
 #include "parse.h"
 #include "scene.h"
-//#define MAIN_DEBUG
+#define MAIN_DEBUG
 int main (int argc, char *argv[]) {
 #ifndef MAIN_DEBUG
     if (argc != 4) {
@@ -28,6 +28,8 @@ int main (int argc, char *argv[]) {
     Parser parser;
     parser.parse_scene_file("/Users/slgu1/Desktop/test", scene);
     scene->set_cmd(3);
+    scene->set_pri_ray_num(3);
+    scene->set_shadow_ray_num(5);
     scene->pre();
     scene->get_intersection("/Users/slgu1/Desktop/test.exr");
 #endif

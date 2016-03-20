@@ -91,6 +91,7 @@ void Parser::parse_scene_file(char *filnam, shared_ptr <Scene> & scene)
         alight * alight_ptr;
         plane * plane_ptr;
         tri * tri_ptr;
+        slight * slight_ptr;
         switch (line[0])  {     // we'll decide which command based on the first character
                 
                 //
@@ -204,8 +205,26 @@ void Parser::parse_scene_file(char *filnam, shared_ptr <Scene> & scene)
                         alight_ptr = new alight(r, g, b);
                         scene->add_light(alight_ptr);
                         break;
+                    case 's':
+                        float nx, ny, nz, ux, uy, uz, len;
+                        //l s x y z nx ny nz ux uy uz len r g b
+                        x = getTokenAsFloat (line, 2);
+                        y = getTokenAsFloat (line, 3);
+                        z = getTokenAsFloat (line, 4);
+                        nx = getTokenAsFloat (line, 5);
+                        ny = getTokenAsFloat (line, 6);
+                        nz = getTokenAsFloat (line, 7);
+                        ux = getTokenAsFloat (line, 8);
+                        uy = getTokenAsFloat (line, 9);
+                        uz = getTokenAsFloat (line, 10);
+                        len = getTokenAsFloat (line, 11);
+                        r = getTokenAsFloat (line, 12);
+                        g = getTokenAsFloat (line, 13);
+                        b = getTokenAsFloat (line, 14);
+                        slight_ptr = new slight(x, y, z, nx, ny, nz, ux, uy, uz, len, r, g, b);
+                        scene->add_light(slight_ptr);
+                        break;
                 }
-                
                 break;
                 
                 //

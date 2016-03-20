@@ -30,7 +30,7 @@ public:
         t = ih / 2;
         b = -t;
     }
-    ray generate_ray(int i, int j) {
+    ray generate_ray(double i, double j) {
         float _u = l + (r - l) * (i + 0.5) / nx;
         float _v = b + (t - b) * (j + 0.5) / ny;
         vect dir = _u * u + _v * v - d * w;

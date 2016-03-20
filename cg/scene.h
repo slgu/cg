@@ -21,6 +21,8 @@ public:
     std::vector < shared_ptr <plane> > planes;
     std::vector < shared_ptr <AABB> > boxes;
     //init
+    int pri_ray_num;
+    int shadow_ray_num;
     Scene():SHADOW_COE(0.001){
         bvh_tree = nullptr;
     }
@@ -52,6 +54,12 @@ public:
     }
     void set_cmd(int __cmd) {
         cmd = __cmd;
+    }
+    void set_pri_ray_num(int _num) {
+        pri_ray_num = _num;
+    }
+    void set_shadow_ray_num(int _num) {
+        shadow_ray_num = _num;
     }
     void pre() {
         if (cmd == 0) {

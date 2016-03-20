@@ -8,23 +8,33 @@
 
 #include <stdio.h>
 #include "scene.h"
+#include <random>
 //#define INTER_DEBUG
 void Scene::get_intersection(std::string filename) {
     Array2D <Rgba> pixels;
     pixels.resizeErase(c->ny, c->nx);
+    //sample pri_ray_num ^ 2 ray
     for (int i = 0; i < c->nx; ++i)
         for (int j = 0; j < c->ny; ++j) {
 #ifdef INTER_DEBUG
             std::cout << "now:" << 100.0 * (i * c->ny + j) / c->nx / c->ny << std::endl;
 #endif
             //generate ray
-            ray ry = c->generate_ray(i, j);
             Rgba & rgb = pixels[c-> ny - 1 - j][i];
             rgb.r = rgb.b = rgb.g = 0;
-            Rgba res = recur_ray_cal(ry, 10);
-            rgb.r = res.r;
-            rgb.g = res.g;
-            rgb.b = res.b;
+            for (int k = 0; k < pri_ray_num; ++k)
+                for(int o = 0; o < pri_ray_num; ++o) {
+                    double rand_num= global_random::single()->next();
+                    ray ry = c->generate_ray(i + (k + rand_num) / pri_ray_num, j +
+                                             (o + rand_num) / pri_ray_num);
+                    Rgba res = recur_ray_cal(ry, 10);
+                    rgb.r += res.r;
+                    rgb.g += res.g;
+                    rgb.b += res.b;
+                }
+            rgb.r /= (pri_ray_num * pri_ray_num);
+            rgb.g /= (pri_ray_num * pri_ray_num);
+            rgb.b /= (pri_ray_num * pri_ray_num);
         }
     write_exr_file(filename, &pixels[0][0], c->nx, c->ny);
 }
@@ -168,18 +178,47 @@ Rgba Scene::recur_ray_cal(ray & ry, int depth) {
     for (auto light = lights.begin(); light != lights.end(); ++light) {
         float tmp_r = 0, tmp_g = 0, tmp_b = 0;
         //if ambient no check for shadow ray
-        if ((*light) -> check_ambient());
-        else {
+        if ((*light) -> check_ambient()) {
+            (*light)->calculate_rgb(intersect_p, n, m, v, tmp_r, tmp_g, tmp_b);
+            r += tmp_r;
+            g += tmp_g;
+            b += tmp_b;
+        }
+        else if ((*light) -> check_area()) {
             //check shadow ray
+            //sample shadow_ray_num * 2 shadow ray and sum average
+            float shadow_avg_r = 0;
+            float shadow_avg_g = 0;
+            float shadow_avg_b = 0;
+            //stratify
+            for (int o = 0; o < shadow_ray_num; ++o)
+                for (int k = 0; k < shadow_ray_num; ++k) {
+                    ray shadow_ray = (std::dynamic_pointer_cast<slight>(*light))->generate_area_shadow_ray(ry.get_t(t0 * (1- SHADOW_COE)), shadow_ray_num, o, k, shadow_check_t);
+                    if (trace(shadow_ray, shadow_check_t, nearest_surface, SHADOW_RAY))
+                        //if intersect
+                        continue;
+                    (*light)->calculate_rgb(intersect_p, n, m, v, tmp_r, tmp_g, tmp_b);
+                    shadow_avg_r += tmp_r;
+                    shadow_avg_g += tmp_g;
+                    shadow_avg_b += tmp_b;
+                }
+            shadow_avg_r /= (shadow_ray_num * shadow_ray_num);
+            shadow_avg_g /= (shadow_ray_num * shadow_ray_num);
+            shadow_avg_b /= (shadow_ray_num * shadow_ray_num);
+            r += shadow_avg_r;
+            g += shadow_avg_g;
+            b += shadow_avg_b;
+        }
+        else {
             ray shadow_ray = (*light)->generate_shadow_ray(ry.get_t(t0 * (1- SHADOW_COE)), shadow_check_t);
             if (trace(shadow_ray, shadow_check_t, nearest_surface, SHADOW_RAY))
                 //if intersect
                 continue;
+            (*light)->calculate_rgb(intersect_p, n, m, v, tmp_r, tmp_g, tmp_b);
+            r += tmp_r;
+            g += tmp_g;
+            b += tmp_b;
         }
-        (*light)->calculate_rgb(intersect_p, n, m, v, tmp_r, tmp_g, tmp_b);
-        r += tmp_r;
-        g += tmp_g;
-        b += tmp_b;
     }
     //if [0,0,0] no need for recur ray trace
     if(m.ir == 0 && m.ig == 0 && m.ib == 0)

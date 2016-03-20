@@ -2,6 +2,7 @@
 #include "vect.h"
 #include "point.h"
 #include <cmath>
+#include <random>
 inline int norm(vect &d) {
     float sum = d.x * d.x + d.y * d.y + d.z * d.z;
     sum = sqrt(sum);
@@ -39,5 +40,26 @@ template <typename T> void swap(T & a, T & b) {
     a = b;
     b = c;
 }
+
+class global_random {
+private:
+    std::default_random_engine generator;
+    std::uniform_real_distribution<double> distribution;
+    global_random():distribution(0.0, 0.1) {
+        
+    }
+public:
+    static std::shared_ptr <global_random> single() {
+        static std::shared_ptr <global_random> ptr;
+        if (ptr == nullptr) {
+            ptr.reset(new global_random());
+        }
+        return ptr;
+    }
+    double next() {
+        return distribution(generator);
+    }
+};
+
 #define SHADOW_RAY 1
 #define NORMAL_RAY 0

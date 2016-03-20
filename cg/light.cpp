@@ -58,3 +58,53 @@ ray plight::generate_shadow_ray(const point & inter_p, float & t) {
     t = norm(dir);
     return ray(inter_p, dir);
 }
+
+bool slight::check_ambient() {
+    return false;
+}
+
+ray slight::generate_shadow_ray(const point &inter_p, float &t) {
+    //random
+    double ru = global_random::single()->next();
+    double rv = global_random::single()->next();
+    randp = p + (ru - 0.5) * len * u + (rv -0.5) * len * v;
+    vect dir = randp - inter_p;
+    t = norm(dir);
+    return ray(inter_p, dir);
+}
+
+
+ray slight::generate_area_shadow_ray(const point & inter_p, int total, int o, int k, float & t) {
+    double ru = global_random::single()->next();
+    double rv = global_random::single()->next();
+    randp = p + ((o + ru) / total - 0.5) * len * u + ((k + rv) / total - 0.5) * len * v;
+    vect dir = randp - inter_p;
+    t = norm(dir);
+    return ray(inter_p, dir);
+}
+
+void slight::calculate_rgb(point & intersect_p, vect & n, material & m,
+                           vect & inter, float & r, float & g, float & b) {
+    //diffuse
+    vect l = randp - intersect_p;
+    norm(l);
+    norm(n);
+    norm(inter);
+    float extent = inner_product(l, n);
+    if (extent < 0) extent = 0;
+    r = extent * color[0] * m.dr;
+    g = extent * color[1] * m.dg;
+    b = extent * color[2] * m.db;
+    //specular
+    vect h = l + inter;
+    norm(h);
+    extent = inner_product(n, h);
+    if (extent < 0) extent = 0;
+    //set exponent extent
+    extent = pow(extent, m.r);
+    r += extent * color[0] * m.sr;
+    g += extent * color[1] * m.sg;
+    b += extent * color[2] * m.sb;
+    return;
+}
+
