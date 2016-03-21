@@ -9,8 +9,10 @@
 #include <stdio.h>
 #include "scene.h"
 #include <random>
+#include "helper.h"
 //#define INTER_DEBUG
 //#define USE_TBB
+//#define USE_GLOSSY
 #ifdef USE_TBB
 #include "tbb/parallel_for.h"
 #endif
@@ -247,10 +249,40 @@ Rgba Scene::recur_ray_cal(ray & ry, int depth) {
     //use reflective ray to recur ray tray
     vect reflect_ray_dir = ry.dir - 2 * inner_product(ry.dir, n) * n;
     norm(reflect_ray_dir);
+#ifdef USE_GLOSSY
+#define GLOSSY_WIDTH 0.3
+#define GLOSSY_NUM 3
+    vect ru_dir(reflect_ray_dir.z, 0, -reflect_ray_dir.x);
+    vect rv_dir = cross_product(reflect_ray_dir, ru_dir);
+    norm(ru_dir);
+    norm(rv_dir);
+    Rgba res;
+    res.r = res.g = res.b = 0;
+    for (int o = 0; o < GLOSSY_NUM; ++o)
+        for (int k = 0; k < GLOSSY_NUM; ++k) {
+            double ru = global_random::single()->next();
+            double rv = global_random::single()->next();
+            vect random_reflect_dir = reflect_ray_dir + (ru - 0.5) * GLOSSY_WIDTH * ru_dir + (rv - 0.5) * GLOSSY_WIDTH * rv_dir;
+            norm(random_reflect_dir);
+            ray random_reflect_ray(ry.get_t(t0 * (1- SHADOW_COE)), random_reflect_dir);
+            Rgba tmp_res = recur_ray_cal(random_reflect_ray, depth - 1);
+            res.r += tmp_res.r;
+            res.g += tmp_res.g;
+            res.b += tmp_res.b;
+        }
+    res.r /= (GLOSSY_NUM * GLOSSY_NUM);
+    res.g /= (GLOSSY_NUM * GLOSSY_NUM);
+    res.b /= (GLOSSY_NUM * GLOSSY_NUM);
+    res.r = r + m.ir * res.r;
+    res.g = g + m.ig * res.g;
+    res.b = b + m.ib * res.b;
+    return res;
+#else
     ray reflect_ray(ry.get_t(t0 * (1- SHADOW_COE)), reflect_ray_dir);
     Rgba res = recur_ray_cal(reflect_ray, depth - 1);
     res.r = r + m.ir * res.r;
     res.g = g + m.ig * res.g;
     res.b = b + m.ib * res.b;
     return res;
+#endif
 }
