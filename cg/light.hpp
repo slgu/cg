@@ -70,11 +70,12 @@ public:
     float color[3];
     vect u;
     vect v;/* u v is the directions of the square */
+    vect n;
     float len; /* length of the area light */
     slight(float x, float y, float z, float nx, float ny, float nz, float ux,
            float uy, float uz, float _len, float r, float g, float b):p(x,y,z) {
         u = vect(ux, uy, uz);
-        vect n(nx, ny, nz);
+        n = vect(nx, ny, nz); //normal vector
         v = cross_product(u, n);
         norm(v);
         norm(u);

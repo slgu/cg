@@ -41,23 +41,30 @@ template <typename T> void swap(T & a, T & b) {
     b = c;
 }
 
-class global_random {
+class thread_random {
 private:
-    std::default_random_engine generator;
-    std::uniform_real_distribution<double> distribution;
-    global_random():distribution(0.0, 0.1) {
+    std::random_device rd;
+    std::mt19937 gen;
+    std::uniform_real_distribution<> dis;
+public:
+    thread_random(): gen(rd()), dis(0, 1){
         
     }
-public:
-    static std::shared_ptr <global_random> single() {
-        static std::shared_ptr <global_random> ptr;
-        if (ptr == nullptr) {
-            ptr.reset(new global_random());
-        }
-        return ptr;
-    }
     double next() {
-        return distribution(generator);
+        return dis(gen);
+    }
+    ~thread_random(){
+        
+    }
+};
+
+
+class global_random {
+public:
+    static double next() {
+        static std::default_random_engine generator;
+        static std::uniform_real_distribution<> dis(0,1);
+        return dis(generator);
     }
 };
 

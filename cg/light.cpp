@@ -65,8 +65,8 @@ bool slight::check_ambient() {
 
 ray slight::generate_shadow_ray(const point &inter_p, float &t) {
     //random
-    double ru = global_random::single()->next();
-    double rv = global_random::single()->next();
+    double ru = global_random::next();
+    double rv = global_random::next();
     randp = p + (ru - 0.5) * len * u + (rv -0.5) * len * v;
     vect dir = randp - inter_p;
     t = norm(dir);
@@ -75,8 +75,8 @@ ray slight::generate_shadow_ray(const point &inter_p, float &t) {
 
 
 ray slight::generate_area_shadow_ray(const point & inter_p, int total, int o, int k, float & t) {
-    double ru = global_random::single()->next();
-    double rv = global_random::single()->next();
+    double ru = global_random::next();
+    double rv = global_random::next();
     randp = p + ((o + ru) / total - 0.5) * len * u + ((k + rv) / total - 0.5) * len * v;
     vect dir = randp - inter_p;
     t = norm(dir);

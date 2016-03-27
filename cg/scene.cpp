@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include "scene.h"
 #include <random>
+#include <thread>
 #include "helper.h"
 //#define INTER_DEBUG
 //#define USE_TBB
@@ -40,9 +41,10 @@ void Scene::render() {
             rgb.r = rgb.b = rgb.g = 0;
             for (int k = 0; k < pri_ray_num; ++k)
                 for(int o = 0; o < pri_ray_num; ++o) {
-                    double rand_num= global_random::single()->next();
-                    ray ry = c->generate_ray(i + (k + rand_num) / pri_ray_num, j +
-                                             (o + rand_num) / pri_ray_num);
+                    double rand_num= global_random::next();
+                    float x = i + (k + rand_num) / pri_ray_num;
+                    float y = j + (o + rand_num) / pri_ray_num;
+                    ray ry = c->generate_ray(x, y);
                     Rgba res = recur_ray_cal(ry, 10);
                     rgb.r += res.r;
                     rgb.g += res.g;
@@ -214,14 +216,21 @@ Rgba Scene::recur_ray_cal(ray & ry, int depth) {
             //stratify
             for (int o = 0; o < shadow_ray_num; ++o)
                 for (int k = 0; k < shadow_ray_num; ++k) {
-                    ray shadow_ray = (std::dynamic_pointer_cast<slight>(*light))->generate_area_shadow_ray(ry.get_t(t0 * (1- SHADOW_COE)), shadow_ray_num, o, k, shadow_check_t);
+                    std::shared_ptr<slight> this_light = std::dynamic_pointer_cast<slight>(*light);
+                    ray shadow_ray = this_light->generate_area_shadow_ray(ry.get_t(t0 * (1- SHADOW_COE)), shadow_ray_num, o, k, shadow_check_t);
                     if (trace(shadow_ray, shadow_check_t, nearest_surface, SHADOW_RAY))
                         //if intersect
                         continue;
                     (*light)->calculate_rgb(intersect_p, n, m, v, tmp_r, tmp_g, tmp_b);
-                    shadow_avg_r += tmp_r;
-                    shadow_avg_g += tmp_g;
-                    shadow_avg_b += tmp_b;
+                    //re-weighted
+                    float weight = -(1.0 / shadow_check_t + 0.0001) * inner_product(shadow_ray.dir, this_light->n) / 100;
+                    
+                    //printf("%.5f\n", weight);
+                    if (weight > 0) {
+                        shadow_avg_r += tmp_r * weight;
+                        shadow_avg_g += tmp_g * weight;
+                        shadow_avg_b += tmp_b * weight;
+                    }
                 }
             shadow_avg_r /= (shadow_ray_num * shadow_ray_num);
             shadow_avg_g /= (shadow_ray_num * shadow_ray_num);
@@ -250,8 +259,8 @@ Rgba Scene::recur_ray_cal(ray & ry, int depth) {
     vect reflect_ray_dir = ry.dir - 2 * inner_product(ry.dir, n) * n;
     norm(reflect_ray_dir);
 #ifdef USE_GLOSSY
-#define GLOSSY_WIDTH 0.3
-#define GLOSSY_NUM 3
+#define GLOSSY_WIDTH 0.5
+#define GLOSSY_NUM 2
     vect ru_dir(reflect_ray_dir.z, 0, -reflect_ray_dir.x);
     vect rv_dir = cross_product(reflect_ray_dir, ru_dir);
     norm(ru_dir);
