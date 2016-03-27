@@ -9,12 +9,9 @@
 import sys,os,math,time,logging,json
 
 if __name__ == "__main__":
-    for i in range(1, 11):
+    for i in range(12, 15):
         filename = "test/test" + str(i)
-        exec_gen_2 = "time ./prog_out " + filename + " " + filename + "_2.exr 2" 
+        exec_gen_2 = "time ./prog_out " + filename + " " + filename + ".exr 3 3"
         print(exec_gen_2)
         os.system(exec_gen_2)
-        exec_gen_3 = "time ./prog_out " + filename + " " + filename + "_3.exr 3" 
-        print(exec_gen_3)
-        os.system(exec_gen_3)
 

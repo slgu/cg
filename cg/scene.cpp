@@ -223,9 +223,7 @@ Rgba Scene::recur_ray_cal(ray & ry, int depth) {
                         continue;
                     (*light)->calculate_rgb(intersect_p, n, m, v, tmp_r, tmp_g, tmp_b);
                     //re-weighted
-                    float weight = -(1.0 / shadow_check_t + 0.0001) * inner_product(shadow_ray.dir, this_light->n) / 100;
-                    
-                    //printf("%.5f\n", weight);
+                    float weight = -(1.0 / (shadow_check_t + 1) / (shadow_check_t + 1)) * inner_product(shadow_ray.dir, this_light->n);
                     if (weight > 0) {
                         shadow_avg_r += tmp_r * weight;
                         shadow_avg_g += tmp_g * weight;

@@ -13,7 +13,7 @@
 int main (int argc, char *argv[]) {
 #ifndef MAIN_DEBUG
     if (argc != 5) {
-        std::cerr << "useage: ./prog_out scenefilename outputopenexr pri_num shadow num" << std::endl;
+        std::cerr << "useage: ./prog_out scenefilename outputopenexr pri_num shadow_num" << std::endl;
         return -1;
     }
     int pri_num = atoi(argv[3]);
